@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,13 +23,30 @@
     --text2: #9997a0;
     --text3: #5f5d68;
     --accent: #c8a96e;
-    --accent2: #e8c98e;
     --ok: #4ade80;
     --warn: #fb923c;
     --danger: #f87171;
     --ok-bg: rgba(74,222,128,0.1);
     --warn-bg: rgba(251,146,60,0.1);
     --danger-bg: rgba(248,113,113,0.1);
+  }
+
+  [data-theme="light"] {
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(0,0,0,0.15);
+    --text: #1a1a2e;
+    --text2: #4a4860;
+    --text3: #9997a0;
+    --accent: #a07840;
+    --ok: #16a34a;
+    --warn: #c2410c;
+    --danger: #dc2626;
+    --ok-bg: rgba(22,163,74,0.1);
+    --warn-bg: rgba(194,65,12,0.1);
+    --danger-bg: rgba(220,38,38,0.1);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,59 +59,42 @@
     max-width: 480px;
     margin: 0 auto;
     padding: 0 0 80px;
+    transition: background 0.2s, color 0.2s;
   }
 
   header {
     padding: 48px 24px 24px;
     border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
   }
 
-  header h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: 28px;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-
+  header h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 28px; letter-spacing: -0.5px; }
   header h1 span { color: var(--accent); }
+  .subtitle { font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .header-actions { display: flex; gap: 8px; align-items: center; padding-top: 4px; }
 
-  .subtitle {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 4px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    color: var(--text2);
+    cursor: pointer;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
   }
+  .icon-btn:hover { background: var(--surface2); color: var(--accent); }
+  .icon-btn svg { width: 18px; height: 18px; }
 
   .stats-bar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border); border-bottom: 1px solid var(--border);
   }
-
-  .stat {
-    background: var(--bg);
-    padding: 16px;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: 22px;
-    font-weight: 500;
-    font-family: 'Fraunces', serif;
-  }
-
-  .stat-label {
-    font-size: 10px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 2px;
-  }
-
+  .stat { background: var(--bg); padding: 16px; text-align: center; }
+  .stat-num { font-size: 22px; font-weight: 500; font-family: 'Fraunces', serif; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
   .stat-num.danger { color: var(--danger); }
   .stat-num.warn { color: var(--warn); }
   .stat-num.ok { color: var(--ok); }
@@ -107,346 +107,242 @@
     border-radius: 12px;
     padding: 16px;
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color 0.15s;
     position: relative;
     overflow: hidden;
   }
-
   .task-card:hover { border-color: var(--border2); }
   .task-card.expanded { border-color: var(--accent); }
-
   .task-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     border-radius: 12px 0 0 12px;
   }
-
   .task-card.status-ok::before { background: var(--ok); }
   .task-card.status-warn::before { background: var(--warn); }
   .task-card.status-danger::before { background: var(--danger); }
 
-  .task-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .task-name {
-    font-size: 14px;
-    font-weight: 500;
-    flex: 1;
-  }
+  .task-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .task-name { font-size: 14px; font-weight: 500; flex: 1; }
 
   .task-badge {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 500;
-    white-space: nowrap;
+    font-size: 10px; padding: 3px 8px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; white-space: nowrap;
   }
-
   .badge-ok { background: var(--ok-bg); color: var(--ok); }
   .badge-warn { background: var(--warn-bg); color: var(--warn); }
   .badge-danger { background: var(--danger-bg); color: var(--danger); }
 
-  .task-meta {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 6px;
-    display: flex;
-    gap: 16px;
-  }
+  .task-meta { font-size: 11px; color: var(--text3); margin-top: 6px; display: flex; gap: 16px; }
 
-  .task-details {
-    display: none;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-  }
-
+  .task-details { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
   .task-card.expanded .task-details { display: block; }
 
-  .detail-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    padding: 5px 0;
-    color: var(--text2);
-  }
-
+  .detail-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; color: var(--text2); }
   .detail-row span:last-child { color: var(--text); }
 
   .history-section { margin-top: 12px; }
-  .history-title {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text3);
-    margin-bottom: 8px;
-  }
-
-  .history-item {
-    font-size: 11px;
-    color: var(--text3);
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-  }
-
+  .history-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 8px; }
+  .history-item { font-size: 11px; color: var(--text3); padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
   .history-item:last-child { border-bottom: none; }
 
-  .btn-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-
+  .btn-row { display: flex; gap: 8px; margin-top: 14px; }
   .btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border2);
-    background: transparent;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border2);
+    background: transparent; color: var(--text); font-family: 'DM Mono', monospace;
+    font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
     transition: background 0.15s;
   }
-
   .btn:hover { background: var(--surface2); }
-
-  .btn-done {
-    border-color: var(--ok);
-    color: var(--ok);
-  }
-
+  .btn-done { border-color: var(--ok); color: var(--ok); }
   .btn-done:hover { background: var(--ok-bg); }
-
-  .btn-edit {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
+  .btn-edit { border-color: var(--accent); color: var(--accent); }
   .btn-edit:hover { background: rgba(200,169,110,0.1); }
+  .btn-remove { border-color: var(--border2); color: var(--text3); flex: 0; padding: 10px 14px; }
 
+  /* Nav */
   .nav {
-    position: fixed;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 480px;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding: 8px 0 16px;
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px; background: var(--surface);
+    border-top: 1px solid var(--border); display: flex; padding: 8px 0 16px;
   }
-
   .nav-btn {
-    flex: 1;
-    background: none;
-    border: none;
-    color: var(--text3);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 8px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    transition: color 0.15s;
+    flex: 1; background: none; border: none; color: var(--text3);
+    font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 8px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.15s;
   }
-
   .nav-btn svg { width: 20px; height: 20px; }
   .nav-btn.active { color: var(--accent); }
 
   .view { display: none; }
   .view.active { display: block; }
 
-  .section-title {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text3);
-    padding: 16px 16px 8px;
-  }
+  .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); padding: 16px 16px 8px; }
 
-  /* Settings view */
+  /* Settings */
   .settings-group { padding: 0 16px; margin-bottom: 24px; }
-
   .setting-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
   }
-
   .setting-label { font-size: 13px; }
   .setting-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
-  .setting-input {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 6px 10px;
-    width: 80px;
-    text-align: center;
-  }
-
   /* Modal */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 100;
-    align-items: flex-end;
-    justify-content: center;
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 100; align-items: flex-end; justify-content: center;
   }
-
   .modal-overlay.open { display: flex; }
-
   .modal {
-    background: var(--surface);
-    border-radius: 20px 20px 0 0;
-    border: 1px solid var(--border2);
-    padding: 24px;
-    width: 100%;
-    max-width: 480px;
-    max-height: 80vh;
-    overflow-y: auto;
+    background: var(--surface); border-radius: 20px 20px 0 0; border: 1px solid var(--border2);
+    padding: 24px; width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto;
   }
-
-  .modal h2 {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
+  .modal h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 20px; margin-bottom: 20px; }
 
   .form-group { margin-bottom: 16px; }
   .form-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 6px; display: block; }
-
   .form-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    padding: 10px 12px;
+    width: 100%; background: var(--surface2); border: 1px solid var(--border2);
+    border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace;
+    font-size: 13px; padding: 10px 12px;
   }
-
   .form-input:focus { outline: none; border-color: var(--accent); }
 
   .modal-btns { display: flex; gap: 8px; margin-top: 20px; }
-
   .btn-primary {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    background: var(--accent);
-    color: var(--bg);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    flex: 1; padding: 12px; border-radius: 8px; border: none; background: var(--accent);
+    color: var(--bg); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+    cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
   }
-
   .btn-cancel {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border2);
-    background: transparent;
-    color: var(--text2);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border2);
+    background: transparent; color: var(--text2); font-family: 'DM Mono', monospace;
+    font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
   }
 
-  /* History view */
+  /* Context menu */
+  .context-menu {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 200; align-items: flex-end; justify-content: center;
+  }
+  .context-menu.open { display: flex; }
+  .context-sheet {
+    background: var(--surface); border-radius: 20px 20px 0 0; border: 1px solid var(--border2);
+    padding: 16px 16px 32px; width: 100%; max-width: 480px;
+  }
+  .context-handle {
+    width: 36px; height: 4px; background: var(--border2); border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .context-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 12px; padding: 0 4px; }
+  .context-task-name { font-size: 15px; font-weight: 500; margin-bottom: 20px; padding: 0 4px; }
+
+  .context-option {
+    display: flex; align-items: center; gap: 14px; padding: 14px 12px;
+    border-radius: 10px; cursor: pointer; transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+  .context-option:hover { background: var(--surface2); }
+  .context-option + .context-option { margin-top: 6px; }
+
+  .context-option svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .context-option-text { font-size: 13px; }
+  .context-option-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  .context-option.archive { border-color: var(--border); }
+  .context-option.archive svg { color: var(--accent); }
+  .context-option.delete { border-color: var(--border); }
+  .context-option.delete svg { color: var(--danger); }
+  .context-option.delete .context-option-text { color: var(--danger); }
+
+  /* History / Digest */
   .history-log { padding: 0 16px; }
-
-  .history-log-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-  }
-
+  .history-log-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
   .history-log-task { color: var(--text); }
   .history-log-date { color: var(--text3); }
 
-  .empty-state {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--text3);
-    font-size: 12px;
-  }
-
-  .empty-state svg { width: 40px; height: 40px; opacity: 0.3; margin-bottom: 12px; }
+  .empty-state { text-align: center; padding: 60px 24px; color: var(--text3); font-size: 12px; }
 
   .digest-section { padding: 16px; }
-
-  .digest-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  .digest-card h3 {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text3);
-    margin-bottom: 12px;
-  }
-
-  .digest-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
+  .digest-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .digest-card h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 12px; }
+  .digest-item { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); }
   .digest-item:last-child { border-bottom: none; }
+
+  /* Archive / Bin view */
+  .bin-section { padding: 0 16px 24px; }
+
+  .archived-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 8px; opacity: 0.7;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .archived-card-info { flex: 1; }
+  .archived-card-name { font-size: 13px; font-weight: 500; }
+  .archived-card-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  .bin-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .bin-card-info { flex: 1; }
+  .bin-card-name { font-size: 13px; font-weight: 500; color: var(--text2); text-decoration: line-through; }
+  .bin-card-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  .bin-actions { display: flex; gap: 6px; }
+  .mini-btn {
+    padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border2);
+    background: transparent; color: var(--text2); font-family: 'DM Mono', monospace;
+    font-size: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .mini-btn:hover { background: var(--surface2); }
+  .mini-btn.restore { border-color: var(--ok); color: var(--ok); }
+  .mini-btn.restore:hover { background: var(--ok-bg); }
+  .mini-btn.perm-delete { border-color: var(--danger); color: var(--danger); }
+  .mini-btn.perm-delete:hover { background: var(--danger-bg); }
+  .mini-btn.unarchive { border-color: var(--accent); color: var(--accent); }
+  .mini-btn.unarchive:hover { background: rgba(200,169,110,0.1); }
+
+  .empty-bin { text-align: center; padding: 32px 16px; color: var(--text3); font-size: 12px; }
+
+  .danger-action {
+    margin: 16px 0 0;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--danger-bg);
+    background: transparent;
+    color: var(--danger);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    width: 100%;
+    transition: background 0.15s;
+  }
+  .danger-action:hover { background: var(--danger-bg); }
 </style>
 </head>
 <body>
 
 <div id="view-tasks" class="view active">
   <header>
-    <h1>Home <span>Tracker</span></h1>
-    <div class="subtitle">Scheduled maintenance</div>
+    <div>
+      <h1>Home <span>Tracker</span></h1>
+      <div class="subtitle">Scheduled maintenance</div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">
+        <svg id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openAdd()" title="Add task">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
   </header>
   <div class="stats-bar">
     <div class="stat"><div class="stat-num danger" id="stat-overdue">0</div><div class="stat-label">Overdue</div></div>
@@ -457,26 +353,25 @@
 </div>
 
 <div id="view-history" class="view">
-  <header>
-    <h1>History</h1>
-    <div class="subtitle">Completion log</div>
-  </header>
+  <header><div><h1>History</h1><div class="subtitle">Completion log</div></div></header>
   <div class="history-log" id="history-log"></div>
 </div>
 
 <div id="view-digest" class="view">
-  <header>
-    <h1>Digest</h1>
-    <div class="subtitle">Weekly summary</div>
-  </header>
+  <header><div><h1>Digest</h1><div class="subtitle">Weekly summary</div></div></header>
   <div class="digest-section" id="digest-section"></div>
 </div>
 
+<div id="view-bin" class="view">
+  <header><div><h1>Archive <span style="color:var(--accent)">&</span> Bin</h1><div class="subtitle">Archived &amp; deleted tasks</div></div></header>
+  <div class="section-title">Archived</div>
+  <div class="bin-section" id="archived-list"></div>
+  <div class="section-title">Recycle bin</div>
+  <div class="bin-section" id="bin-list"></div>
+</div>
+
 <div id="view-settings" class="view">
-  <header>
-    <h1>Settings</h1>
-    <div class="subtitle">Task frequencies</div>
-  </header>
+  <header><div><h1>Settings</h1><div class="subtitle">Task frequencies</div></div></header>
   <div id="settings-list"></div>
 </div>
 
@@ -493,31 +388,58 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
     Digest
   </button>
+  <button class="nav-btn" onclick="showView('bin', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12"/></svg>
+    Archive
+  </button>
   <button class="nav-btn" onclick="showView('settings', this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
     Settings
   </button>
 </nav>
 
-<!-- Edit Modal -->
+<!-- Add/Edit Modal -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
-    <h2>Edit Task</h2>
+    <h2 id="modal-title">Add Task</h2>
     <div class="form-group">
       <label class="form-label">Task name</label>
-      <input class="form-input" id="edit-name" type="text">
+      <input class="form-input" id="edit-name" type="text" placeholder="e.g. Clean gutters">
     </div>
     <div class="form-group">
       <label class="form-label">Frequency (days)</label>
-      <input class="form-input" id="edit-freq" type="number" min="1">
+      <input class="form-input" id="edit-freq" type="number" min="1" placeholder="e.g. 90">
     </div>
     <div class="form-group">
-      <label class="form-label">Last completed</label>
+      <label class="form-label">Last completed (optional)</label>
       <input class="form-input" id="edit-last" type="date">
     </div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-primary" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Context menu (archive or delete) -->
+<div class="context-menu" id="context-menu">
+  <div class="context-sheet">
+    <div class="context-handle"></div>
+    <div class="context-title">Remove task</div>
+    <div class="context-task-name" id="context-task-name"></div>
+    <div class="context-option archive" onclick="doArchive()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 12h4"/></svg>
+      <div>
+        <div class="context-option-text">Archive task</div>
+        <div class="context-option-sub">Hide from list, restore anytime</div>
+      </div>
+    </div>
+    <div class="context-option delete" onclick="doDelete()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      <div>
+        <div class="context-option-text">Move to bin</div>
+        <div class="context-option-sub">Can be restored from the Archive tab</div>
+      </div>
     </div>
   </div>
 </div>
@@ -533,70 +455,84 @@ const DEFAULT_TASKS = [
   { id: 7, name: 'Clean showers', freqDays: 14, lastDone: null, history: [] },
 ];
 
-function loadTasks() {
-  const saved = localStorage.getItem('home_tracker_tasks');
-  if (saved) return JSON.parse(saved);
-  return JSON.parse(JSON.stringify(DEFAULT_TASKS));
+function load(key, def) {
+  const s = localStorage.getItem(key);
+  return s ? JSON.parse(s) : (typeof def === 'function' ? def() : def);
 }
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
-function saveTasks(tasks) {
-  localStorage.setItem('home_tracker_tasks', JSON.stringify(tasks));
-}
-
-let tasks = loadTasks();
+let tasks = load('ht_tasks', () => JSON.parse(JSON.stringify(DEFAULT_TASKS)));
+let archived = load('ht_archived', []);
+let bin = load('ht_bin', []);
 let editingId = null;
 let expandedId = null;
+let contextId = null;
+
+const savedTheme = localStorage.getItem('ht_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('ht_theme', next);
+  updateThemeIcon(next);
+}
+
+function updateThemeIcon(theme) {
+  const d = document.getElementById('theme-icon-dark');
+  const l = document.getElementById('theme-icon-light');
+  if (!d || !l) return;
+  d.style.display = theme === 'dark' ? 'block' : 'none';
+  l.style.display = theme === 'light' ? 'block' : 'none';
+}
 
 function getDaysUntilDue(task) {
   if (!task.lastDone) return -task.freqDays;
-  const last = new Date(task.lastDone);
-  const due = new Date(last.getTime() + task.freqDays * 86400000);
-  const now = new Date();
-  return Math.round((due - now) / 86400000);
+  const due = new Date(new Date(task.lastDone).getTime() + task.freqDays * 86400000);
+  return Math.round((due - new Date()) / 86400000);
 }
 
-function getStatus(daysUntil) {
-  if (daysUntil < 0) return 'danger';
-  if (daysUntil <= 7) return 'warn';
-  return 'ok';
+function getStatus(d) { return d < 0 ? 'danger' : d <= 7 ? 'warn' : 'ok'; }
+
+function getBadgeText(d) {
+  if (d < 0) return `${Math.abs(d)}d overdue`;
+  if (d === 0) return 'due today';
+  if (d <= 7) return `due in ${d}d`;
+  return `${d}d left`;
 }
 
-function getBadgeText(daysUntil) {
-  if (daysUntil < 0) return `${Math.abs(daysUntil)}d overdue`;
-  if (daysUntil === 0) return 'due today';
-  if (daysUntil <= 7) return `due in ${daysUntil}d`;
-  return `${daysUntil}d left`;
+function formatDate(s) {
+  if (!s) return 'Never';
+  return new Date(s).toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-function formatDate(dateStr) {
-  if (!dateStr) return 'Never';
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+function nextId() {
+  const all = [...tasks, ...archived, ...bin];
+  return all.length > 0 ? Math.max(...all.map(t => t.id)) + 1 : 1;
 }
 
 function renderTasks() {
   const sorted = [...tasks].sort((a, b) => getDaysUntilDue(a) - getDaysUntilDue(b));
-
   let overdue = 0, dueSoon = 0, ok = 0;
   sorted.forEach(t => {
-    const d = getDaysUntilDue(t);
-    const s = getStatus(d);
-    if (s === 'danger') overdue++;
-    else if (s === 'warn') dueSoon++;
-    else ok++;
+    const s = getStatus(getDaysUntilDue(t));
+    if (s === 'danger') overdue++; else if (s === 'warn') dueSoon++; else ok++;
   });
-
   document.getElementById('stat-overdue').textContent = overdue;
   document.getElementById('stat-due').textContent = dueSoon;
   document.getElementById('stat-ok').textContent = ok;
 
   const list = document.getElementById('task-list');
+  if (sorted.length === 0) {
+    list.innerHTML = '<div class="empty-state">No active tasks.<br><br>Add one with the + button.</div>';
+    return;
+  }
   list.innerHTML = sorted.map(task => {
     const days = getDaysUntilDue(task);
     const status = getStatus(days);
     const expanded = expandedId === task.id;
     const recentHistory = (task.history || []).slice(-3).reverse();
-
     return `<div class="task-card status-${status} ${expanded ? 'expanded' : ''}" onclick="toggleExpand(${task.id})">
       <div class="task-top">
         <div class="task-name">${task.name}</div>
@@ -610,14 +546,11 @@ function renderTasks() {
         <div class="detail-row"><span>Frequency</span><span>Every ${task.freqDays} days</span></div>
         <div class="detail-row"><span>Last done</span><span>${formatDate(task.lastDone)}</span></div>
         <div class="detail-row"><span>Next due</span><span>${task.lastDone ? formatDate(new Date(new Date(task.lastDone).getTime() + task.freqDays * 86400000).toISOString().split('T')[0]) : '—'}</span></div>
-        ${recentHistory.length > 0 ? `
-        <div class="history-section">
-          <div class="history-title">Recent history</div>
-          ${recentHistory.map(h => `<div class="history-item"><span>${formatDate(h)}</span><span>✓</span></div>`).join('')}
-        </div>` : ''}
+        ${recentHistory.length > 0 ? `<div class="history-section"><div class="history-title">Recent history</div>${recentHistory.map(h => `<div class="history-item"><span>${formatDate(h)}</span><span>✓</span></div>`).join('')}</div>` : ''}
         <div class="btn-row">
           <button class="btn btn-done" onclick="event.stopPropagation(); markDone(${task.id})">✓ Mark done</button>
           <button class="btn btn-edit" onclick="event.stopPropagation(); openEdit(${task.id})">Edit</button>
+          <button class="btn btn-remove" onclick="event.stopPropagation(); openContext(${task.id})" title="Archive or delete">✕</button>
         </div>
       </div>
     </div>`;
@@ -635,15 +568,67 @@ function markDone(id) {
   if (!task.history) task.history = [];
   task.history.push(today);
   task.lastDone = today;
-  saveTasks(tasks);
+  save('ht_tasks', tasks);
   renderTasks();
   renderHistory();
   renderDigest();
 }
 
+function openContext(id) {
+  contextId = id;
+  const task = tasks.find(t => t.id === id);
+  document.getElementById('context-task-name').textContent = task.name;
+  document.getElementById('context-menu').classList.add('open');
+}
+
+function closeContext() {
+  document.getElementById('context-menu').classList.remove('open');
+  contextId = null;
+}
+
+function doArchive() {
+  const task = tasks.find(t => t.id === contextId);
+  task.archivedAt = new Date().toISOString().split('T')[0];
+  archived.push(task);
+  tasks = tasks.filter(t => t.id !== contextId);
+  if (expandedId === contextId) expandedId = null;
+  save('ht_tasks', tasks);
+  save('ht_archived', archived);
+  closeContext();
+  renderTasks();
+  renderBin();
+}
+
+function doDelete() {
+  const task = tasks.find(t => t.id === contextId);
+  task.deletedAt = new Date().toISOString().split('T')[0];
+  bin.push(task);
+  tasks = tasks.filter(t => t.id !== contextId);
+  if (expandedId === contextId) expandedId = null;
+  save('ht_tasks', tasks);
+  save('ht_bin', bin);
+  closeContext();
+  renderTasks();
+  renderBin();
+}
+
+document.getElementById('context-menu').addEventListener('click', function(e) {
+  if (e.target === this) closeContext();
+});
+
+function openAdd() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Add Task';
+  document.getElementById('edit-name').value = '';
+  document.getElementById('edit-freq').value = '';
+  document.getElementById('edit-last').value = '';
+  document.getElementById('edit-modal').classList.add('open');
+}
+
 function openEdit(id) {
   editingId = id;
   const task = tasks.find(t => t.id === id);
+  document.getElementById('modal-title').textContent = 'Edit Task';
   document.getElementById('edit-name').value = task.name;
   document.getElementById('edit-freq').value = task.freqDays;
   document.getElementById('edit-last').value = task.lastDone || '';
@@ -656,35 +641,103 @@ function closeModal() {
 }
 
 function saveEdit() {
-  const task = tasks.find(t => t.id === editingId);
-  task.name = document.getElementById('edit-name').value;
-  task.freqDays = parseInt(document.getElementById('edit-freq').value);
-  const lastVal = document.getElementById('edit-last').value;
-  task.lastDone = lastVal || null;
-  saveTasks(tasks);
+  const name = document.getElementById('edit-name').value.trim();
+  const freq = parseInt(document.getElementById('edit-freq').value);
+  const last = document.getElementById('edit-last').value || null;
+  if (!name || !freq || freq < 1) return;
+  if (editingId !== null) {
+    const task = tasks.find(t => t.id === editingId);
+    task.name = name; task.freqDays = freq; task.lastDone = last;
+  } else {
+    tasks.push({ id: nextId(), name, freqDays: freq, lastDone: last, history: [] });
+  }
+  save('ht_tasks', tasks);
   closeModal();
   renderTasks();
   renderSettings();
 }
 
-function renderHistory() {
-  const log = document.getElementById('history-log');
-  const allHistory = [];
-  tasks.forEach(t => {
-    (t.history || []).forEach(d => allHistory.push({ name: t.name, date: d }));
-  });
-  allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+function unarchive(id) {
+  const task = archived.find(t => t.id === id);
+  delete task.archivedAt;
+  tasks.push(task);
+  archived = archived.filter(t => t.id !== id);
+  save('ht_tasks', tasks);
+  save('ht_archived', archived);
+  renderTasks();
+  renderBin();
+}
 
-  if (allHistory.length === 0) {
-    log.innerHTML = '<div class="empty-state"><div>No history yet</div><div style="margin-top:8px;font-size:11px;">Mark tasks as done to build your log</div></div>';
-    return;
+function restoreFromBin(id) {
+  const task = bin.find(t => t.id === id);
+  delete task.deletedAt;
+  tasks.push(task);
+  bin = bin.filter(t => t.id !== id);
+  save('ht_tasks', tasks);
+  save('ht_bin', bin);
+  renderTasks();
+  renderBin();
+}
+
+function permDelete(id) {
+  if (!confirm('Permanently delete this task? This cannot be undone.')) return;
+  bin = bin.filter(t => t.id !== id);
+  save('ht_bin', bin);
+  renderBin();
+}
+
+function emptyBin() {
+  if (!confirm('Permanently delete all items in the bin?')) return;
+  bin = [];
+  save('ht_bin', bin);
+  renderBin();
+}
+
+function renderBin() {
+  const archList = document.getElementById('archived-list');
+  const binList = document.getElementById('bin-list');
+
+  if (archived.length === 0) {
+    archList.innerHTML = '<div class="empty-bin">No archived tasks</div>';
+  } else {
+    archList.innerHTML = archived.map(t => `
+      <div class="archived-card">
+        <div class="archived-card-info">
+          <div class="archived-card-name">${t.name}</div>
+          <div class="archived-card-meta">Every ${t.freqDays}d · Archived ${formatDate(t.archivedAt)}</div>
+        </div>
+        <button class="mini-btn unarchive" onclick="unarchive(${t.id})">Restore</button>
+      </div>`).join('');
   }
 
-  log.innerHTML = allHistory.map(h => `
-    <div class="history-log-item">
-      <span class="history-log-task">${h.name}</span>
-      <span class="history-log-date">${formatDate(h.date)}</span>
-    </div>`).join('');
+  if (bin.length === 0) {
+    binList.innerHTML = '<div class="empty-bin">Bin is empty</div>';
+  } else {
+    binList.innerHTML = bin.map(t => `
+      <div class="bin-card">
+        <div class="bin-card-info">
+          <div class="bin-card-name">${t.name}</div>
+          <div class="bin-card-meta">Deleted ${formatDate(t.deletedAt)}</div>
+        </div>
+        <div class="bin-actions">
+          <button class="mini-btn restore" onclick="restoreFromBin(${t.id})">Restore</button>
+          <button class="mini-btn perm-delete" onclick="permDelete(${t.id})">Delete</button>
+        </div>
+      </div>`).join('') +
+      `<button class="danger-action" onclick="emptyBin()">Empty bin</button>`;
+  }
+}
+
+function renderHistory() {
+  const log = document.getElementById('history-log');
+  const all = [];
+  tasks.forEach(t => (t.history || []).forEach(d => all.push({ name: t.name, date: d })));
+  all.sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (all.length === 0) {
+    log.innerHTML = '<div class="empty-state">No history yet.<br><br>Mark tasks as done to build your log.</div>';
+    return;
+  }
+  log.innerHTML = all.map(h => `<div class="history-log-item"><span class="history-log-task">${h.name}</span><span class="history-log-date">${formatDate(h.date)}</span></div>`).join('');
 }
 
 function renderDigest() {
@@ -692,46 +745,18 @@ function renderDigest() {
   const overdue = tasks.filter(t => getDaysUntilDue(t) < 0).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
   const dueSoon = tasks.filter(t => { const d = getDaysUntilDue(t); return d >= 0 && d <= 14; }).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
   const upcoming = tasks.filter(t => getDaysUntilDue(t) > 14).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
-
   let html = '';
-
-  if (overdue.length > 0) {
-    html += `<div class="digest-card">
-      <h3>⚠ Overdue (${overdue.length})</h3>
-      ${overdue.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--danger)">${Math.abs(getDaysUntilDue(t))}d ago</span></div>`).join('')}
-    </div>`;
-  }
-
-  if (dueSoon.length > 0) {
-    html += `<div class="digest-card">
-      <h3>Due within 2 weeks (${dueSoon.length})</h3>
-      ${dueSoon.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--warn)">${getDaysUntilDue(t) === 0 ? 'Today' : 'In ' + getDaysUntilDue(t) + 'd'}</span></div>`).join('')}
-    </div>`;
-  }
-
-  if (upcoming.length > 0) {
-    html += `<div class="digest-card">
-      <h3>Upcoming</h3>
-      ${upcoming.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--text3)">In ${getDaysUntilDue(t)}d</span></div>`).join('')}
-    </div>`;
-  }
-
-  if (!html) html = '<div class="empty-state"><div>All tasks on track</div></div>';
+  if (overdue.length > 0) html += `<div class="digest-card"><h3>Overdue (${overdue.length})</h3>${overdue.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--danger)">${Math.abs(getDaysUntilDue(t))}d ago</span></div>`).join('')}</div>`;
+  if (dueSoon.length > 0) html += `<div class="digest-card"><h3>Due within 2 weeks (${dueSoon.length})</h3>${dueSoon.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--warn)">${getDaysUntilDue(t) === 0 ? 'Today' : 'In ' + getDaysUntilDue(t) + 'd'}</span></div>`).join('')}</div>`;
+  if (upcoming.length > 0) html += `<div class="digest-card"><h3>Upcoming</h3>${upcoming.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--text3)">In ${getDaysUntilDue(t)}d</span></div>`).join('')}</div>`;
+  if (!html) html = '<div class="empty-state">All tasks on track</div>';
   section.innerHTML = html;
 }
 
 function renderSettings() {
-  const list = document.getElementById('settings-list');
-  list.innerHTML = '<div class="section-title">Tap a frequency to edit</div>' +
-    '<div class="settings-group">' +
-    tasks.map(task => `
-      <div class="setting-item">
-        <div>
-          <div class="setting-label">${task.name}</div>
-          <div class="setting-sub">Every ${task.freqDays} days</div>
-        </div>
-        <button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="openEdit(${task.id})">Edit</button>
-      </div>`).join('') +
+  document.getElementById('settings-list').innerHTML =
+    '<div class="section-title">Tap edit to adjust a task</div><div class="settings-group">' +
+    tasks.map(task => `<div class="setting-item"><div><div class="setting-label">${task.name}</div><div class="setting-sub">Every ${task.freqDays} days</div></div><button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="openEdit(${task.id})">Edit</button></div>`).join('') +
     '</div>';
 }
 
@@ -740,9 +765,9 @@ function showView(name, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
   btn.classList.add('active');
-
   if (name === 'history') renderHistory();
   if (name === 'digest') renderDigest();
+  if (name === 'bin') renderBin();
   if (name === 'settings') renderSettings();
 }
 
