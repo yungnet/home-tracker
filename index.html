@@ -232,8 +232,8 @@
 <div id="view-tasks" class="view">
   <header>
     <div>
-      <h1>Home <span>Tracker</span><span class="sync-dot" id="sync-dot"></span></h1>
-      <div class="subtitle" id="subtitle-email"></div>
+      <h1>Yung Home <span>Tracker</span><span class="sync-dot" id="sync-dot"></span></h1>
+      <div class="subtitle">Scheduled home maintenance — get shit done.</div>
     </div>
     <div class="header-actions">
       <button class="icon-btn" onclick="window._signOut()" title="Sign out">
@@ -499,7 +499,7 @@ function renderAll() { renderTasks(); renderHistory(); renderDigest(); renderBin
 function showApp(user) {
   currentUser = user;
   const email = user.email || '';
-  document.getElementById('subtitle-email').textContent = email;
+  
   hide('screen-loading'); hide('screen-signin'); hide('screen-denied');
   document.getElementById('view-tasks').classList.add('active');
   document.getElementById('main-nav').style.display = 'flex';
