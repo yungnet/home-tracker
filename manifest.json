@@ -1,11 +1,12 @@
 {
-  "name": "Home Tracker",
+  "name": "Yung Home Tracker",
   "short_name": "Home Tracker",
   "description": "Scheduled home maintenance tracker",
-  "start_url": "/index.html",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0f0f1a",
-  "theme_color": "#1a1a2e",
+  "background_color": "#f2f2f7",
+  "theme_color": "#f2f2f7",
   "orientation": "portrait",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
