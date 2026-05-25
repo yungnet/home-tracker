@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Home Tracker">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Home Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap');
+
+  :root {
+    --bg: #0f0f1a;
+    --surface: #1a1a2e;
+    --surface2: #22223b;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #f0ede6;
+    --text2: #9997a0;
+    --text3: #5f5d68;
+    --accent: #c8a96e;
+    --accent2: #e8c98e;
+    --ok: #4ade80;
+    --warn: #fb923c;
+    --danger: #f87171;
+    --ok-bg: rgba(74,222,128,0.1);
+    --warn-bg: rgba(251,146,60,0.1);
+    --danger-bg: rgba(248,113,113,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+  }
+
+  header {
+    padding: 48px 24px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  header h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    background: var(--bg);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 22px;
+    font-weight: 500;
+    font-family: 'Fraunces', serif;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .stat-num.danger { color: var(--danger); }
+  .stat-num.warn { color: var(--warn); }
+  .stat-num.ok { color: var(--ok); }
+
+  .tasks { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  .task-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .task-card:hover { border-color: var(--border2); }
+  .task-card.expanded { border-color: var(--accent); }
+
+  .task-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 12px 0 0 12px;
+  }
+
+  .task-card.status-ok::before { background: var(--ok); }
+  .task-card.status-warn::before { background: var(--warn); }
+  .task-card.status-danger::before { background: var(--danger); }
+
+  .task-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .task-name {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .task-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .badge-ok { background: var(--ok-bg); color: var(--ok); }
+  .badge-warn { background: var(--warn-bg); color: var(--warn); }
+  .badge-danger { background: var(--danger-bg); color: var(--danger); }
+
+  .task-meta {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 6px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .task-details {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .task-card.expanded .task-details { display: block; }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 5px 0;
+    color: var(--text2);
+  }
+
+  .detail-row span:last-child { color: var(--text); }
+
+  .history-section { margin-top: 12px; }
+  .history-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+
+  .history-item {
+    font-size: 11px;
+    color: var(--text3);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .history-item:last-child { border-bottom: none; }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: background 0.15s;
+  }
+
+  .btn:hover { background: var(--surface2); }
+
+  .btn-done {
+    border-color: var(--ok);
+    color: var(--ok);
+  }
+
+  .btn-done:hover { background: var(--ok-bg); }
+
+  .btn-edit {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-edit:hover { background: rgba(200,169,110,0.1); }
+
+  .nav {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 0 16px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+  }
+
+  .nav-btn svg { width: 20px; height: 20px; }
+  .nav-btn.active { color: var(--accent); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    padding: 16px 16px 8px;
+  }
+
+  /* Settings view */
+  .settings-group { padding: 0 16px; margin-bottom: 24px; }
+
+  .setting-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .setting-label { font-size: 13px; }
+  .setting-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  .setting-input {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 6px 10px;
+    width: 80px;
+    text-align: center;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    border: 1px solid var(--border2);
+    padding: 24px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 6px; display: block; }
+
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .form-input:focus { outline: none; border-color: var(--accent); }
+
+  .modal-btns { display: flex; gap: 8px; margin-top: 20px; }
+
+  .btn-primary {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* History view */
+  .history-log { padding: 0 16px; }
+
+  .history-log-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .history-log-task { color: var(--text); }
+  .history-log-date { color: var(--text3); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text3);
+    font-size: 12px;
+  }
+
+  .empty-state svg { width: 40px; height: 40px; opacity: 0.3; margin-bottom: 12px; }
+
+  .digest-section { padding: 16px; }
+
+  .digest-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .digest-card h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .digest-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .digest-item:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<div id="view-tasks" class="view active">
+  <header>
+    <h1>Home <span>Tracker</span></h1>
+    <div class="subtitle">Scheduled maintenance</div>
+  </header>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num danger" id="stat-overdue">0</div><div class="stat-label">Overdue</div></div>
+    <div class="stat"><div class="stat-num warn" id="stat-due">0</div><div class="stat-label">Due soon</div></div>
+    <div class="stat"><div class="stat-num ok" id="stat-ok">0</div><div class="stat-label">On track</div></div>
+  </div>
+  <div class="tasks" id="task-list"></div>
+</div>
+
+<div id="view-history" class="view">
+  <header>
+    <h1>History</h1>
+    <div class="subtitle">Completion log</div>
+  </header>
+  <div class="history-log" id="history-log"></div>
+</div>
+
+<div id="view-digest" class="view">
+  <header>
+    <h1>Digest</h1>
+    <div class="subtitle">Weekly summary</div>
+  </header>
+  <div class="digest-section" id="digest-section"></div>
+</div>
+
+<div id="view-settings" class="view">
+  <header>
+    <h1>Settings</h1>
+    <div class="subtitle">Task frequencies</div>
+  </header>
+  <div id="settings-list"></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showView('tasks', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+    Tasks
+  </button>
+  <button class="nav-btn" onclick="showView('history', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    History
+  </button>
+  <button class="nav-btn" onclick="showView('digest', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    Digest
+  </button>
+  <button class="nav-btn" onclick="showView('settings', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    Settings
+  </button>
+</nav>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <h2>Edit Task</h2>
+    <div class="form-group">
+      <label class="form-label">Task name</label>
+      <input class="form-input" id="edit-name" type="text">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Frequency (days)</label>
+      <input class="form-input" id="edit-freq" type="number" min="1">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Last completed</label>
+      <input class="form-input" id="edit-last" type="date">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_TASKS = [
+  { id: 1, name: 'Change furnace filter', freqDays: 90, lastDone: null, history: [] },
+  { id: 2, name: 'Clean HRV', freqDays: 180, lastDone: null, history: [] },
+  { id: 3, name: 'Clean dryer lint vent', freqDays: 180, lastDone: null, history: [] },
+  { id: 4, name: 'Clean range hood filter', freqDays: 90, lastDone: null, history: [] },
+  { id: 5, name: 'Replace air purifier filters', freqDays: 180, lastDone: null, history: [] },
+  { id: 6, name: 'Tidy garage', freqDays: 30, lastDone: null, history: [] },
+  { id: 7, name: 'Clean showers', freqDays: 14, lastDone: null, history: [] },
+];
+
+function loadTasks() {
+  const saved = localStorage.getItem('home_tracker_tasks');
+  if (saved) return JSON.parse(saved);
+  return JSON.parse(JSON.stringify(DEFAULT_TASKS));
+}
+
+function saveTasks(tasks) {
+  localStorage.setItem('home_tracker_tasks', JSON.stringify(tasks));
+}
+
+let tasks = loadTasks();
+let editingId = null;
+let expandedId = null;
+
+function getDaysUntilDue(task) {
+  if (!task.lastDone) return -task.freqDays;
+  const last = new Date(task.lastDone);
+  const due = new Date(last.getTime() + task.freqDays * 86400000);
+  const now = new Date();
+  return Math.round((due - now) / 86400000);
+}
+
+function getStatus(daysUntil) {
+  if (daysUntil < 0) return 'danger';
+  if (daysUntil <= 7) return 'warn';
+  return 'ok';
+}
+
+function getBadgeText(daysUntil) {
+  if (daysUntil < 0) return `${Math.abs(daysUntil)}d overdue`;
+  if (daysUntil === 0) return 'due today';
+  if (daysUntil <= 7) return `due in ${daysUntil}d`;
+  return `${daysUntil}d left`;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return 'Never';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function renderTasks() {
+  const sorted = [...tasks].sort((a, b) => getDaysUntilDue(a) - getDaysUntilDue(b));
+
+  let overdue = 0, dueSoon = 0, ok = 0;
+  sorted.forEach(t => {
+    const d = getDaysUntilDue(t);
+    const s = getStatus(d);
+    if (s === 'danger') overdue++;
+    else if (s === 'warn') dueSoon++;
+    else ok++;
+  });
+
+  document.getElementById('stat-overdue').textContent = overdue;
+  document.getElementById('stat-due').textContent = dueSoon;
+  document.getElementById('stat-ok').textContent = ok;
+
+  const list = document.getElementById('task-list');
+  list.innerHTML = sorted.map(task => {
+    const days = getDaysUntilDue(task);
+    const status = getStatus(days);
+    const expanded = expandedId === task.id;
+    const recentHistory = (task.history || []).slice(-3).reverse();
+
+    return `<div class="task-card status-${status} ${expanded ? 'expanded' : ''}" onclick="toggleExpand(${task.id})">
+      <div class="task-top">
+        <div class="task-name">${task.name}</div>
+        <div class="task-badge badge-${status}">${getBadgeText(days)}</div>
+      </div>
+      <div class="task-meta">
+        <span>Every ${task.freqDays}d</span>
+        <span>Last: ${formatDate(task.lastDone)}</span>
+      </div>
+      <div class="task-details">
+        <div class="detail-row"><span>Frequency</span><span>Every ${task.freqDays} days</span></div>
+        <div class="detail-row"><span>Last done</span><span>${formatDate(task.lastDone)}</span></div>
+        <div class="detail-row"><span>Next due</span><span>${task.lastDone ? formatDate(new Date(new Date(task.lastDone).getTime() + task.freqDays * 86400000).toISOString().split('T')[0]) : '—'}</span></div>
+        ${recentHistory.length > 0 ? `
+        <div class="history-section">
+          <div class="history-title">Recent history</div>
+          ${recentHistory.map(h => `<div class="history-item"><span>${formatDate(h)}</span><span>✓</span></div>`).join('')}
+        </div>` : ''}
+        <div class="btn-row">
+          <button class="btn btn-done" onclick="event.stopPropagation(); markDone(${task.id})">✓ Mark done</button>
+          <button class="btn btn-edit" onclick="event.stopPropagation(); openEdit(${task.id})">Edit</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleExpand(id) {
+  expandedId = expandedId === id ? null : id;
+  renderTasks();
+}
+
+function markDone(id) {
+  const task = tasks.find(t => t.id === id);
+  const today = new Date().toISOString().split('T')[0];
+  if (!task.history) task.history = [];
+  task.history.push(today);
+  task.lastDone = today;
+  saveTasks(tasks);
+  renderTasks();
+  renderHistory();
+  renderDigest();
+}
+
+function openEdit(id) {
+  editingId = id;
+  const task = tasks.find(t => t.id === id);
+  document.getElementById('edit-name').value = task.name;
+  document.getElementById('edit-freq').value = task.freqDays;
+  document.getElementById('edit-last').value = task.lastDone || '';
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  editingId = null;
+}
+
+function saveEdit() {
+  const task = tasks.find(t => t.id === editingId);
+  task.name = document.getElementById('edit-name').value;
+  task.freqDays = parseInt(document.getElementById('edit-freq').value);
+  const lastVal = document.getElementById('edit-last').value;
+  task.lastDone = lastVal || null;
+  saveTasks(tasks);
+  closeModal();
+  renderTasks();
+  renderSettings();
+}
+
+function renderHistory() {
+  const log = document.getElementById('history-log');
+  const allHistory = [];
+  tasks.forEach(t => {
+    (t.history || []).forEach(d => allHistory.push({ name: t.name, date: d }));
+  });
+  allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (allHistory.length === 0) {
+    log.innerHTML = '<div class="empty-state"><div>No history yet</div><div style="margin-top:8px;font-size:11px;">Mark tasks as done to build your log</div></div>';
+    return;
+  }
+
+  log.innerHTML = allHistory.map(h => `
+    <div class="history-log-item">
+      <span class="history-log-task">${h.name}</span>
+      <span class="history-log-date">${formatDate(h.date)}</span>
+    </div>`).join('');
+}
+
+function renderDigest() {
+  const section = document.getElementById('digest-section');
+  const overdue = tasks.filter(t => getDaysUntilDue(t) < 0).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
+  const dueSoon = tasks.filter(t => { const d = getDaysUntilDue(t); return d >= 0 && d <= 14; }).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
+  const upcoming = tasks.filter(t => getDaysUntilDue(t) > 14).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
+
+  let html = '';
+
+  if (overdue.length > 0) {
+    html += `<div class="digest-card">
+      <h3>⚠ Overdue (${overdue.length})</h3>
+      ${overdue.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--danger)">${Math.abs(getDaysUntilDue(t))}d ago</span></div>`).join('')}
+    </div>`;
+  }
+
+  if (dueSoon.length > 0) {
+    html += `<div class="digest-card">
+      <h3>Due within 2 weeks (${dueSoon.length})</h3>
+      ${dueSoon.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--warn)">${getDaysUntilDue(t) === 0 ? 'Today' : 'In ' + getDaysUntilDue(t) + 'd'}</span></div>`).join('')}
+    </div>`;
+  }
+
+  if (upcoming.length > 0) {
+    html += `<div class="digest-card">
+      <h3>Upcoming</h3>
+      ${upcoming.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--text3)">In ${getDaysUntilDue(t)}d</span></div>`).join('')}
+    </div>`;
+  }
+
+  if (!html) html = '<div class="empty-state"><div>All tasks on track</div></div>';
+  section.innerHTML = html;
+}
+
+function renderSettings() {
+  const list = document.getElementById('settings-list');
+  list.innerHTML = '<div class="section-title">Tap a frequency to edit</div>' +
+    '<div class="settings-group">' +
+    tasks.map(task => `
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">${task.name}</div>
+          <div class="setting-sub">Every ${task.freqDays} days</div>
+        </div>
+        <button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="openEdit(${task.id})">Edit</button>
+      </div>`).join('') +
+    '</div>';
+}
+
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+
+  if (name === 'history') renderHistory();
+  if (name === 'digest') renderDigest();
+  if (name === 'settings') renderSettings();
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+renderTasks();
+</script>
+</body>
+</html>
