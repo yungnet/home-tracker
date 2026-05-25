@@ -747,7 +747,8 @@ function renderAll() { renderTasks(); renderHistory(); renderDigest(); renderBin
 function showApp(user) {
   currentUser = user;
   const email = user.email || '';
-  
+  const bar = document.getElementById('signed-in-bar');
+  if (bar) bar.textContent = 'Signed in as ' + email;
   hide('screen-loading'); hide('screen-signin'); hide('screen-denied');
   document.getElementById('view-tasks').classList.add('active');
   document.getElementById('main-nav').style.display = 'flex';
