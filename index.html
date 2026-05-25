@@ -1016,14 +1016,20 @@ function loadDigestSettings() {
   const saved = JSON.parse(localStorage.getItem('ht_digest') || '{}');
   const useCustom = saved.useCustomEmail || false;
 
-  // Pre-populate with signed-in Gmail by default
-  const defaultEmail = currentUser ? currentUser.email : '';
+  // Get email from auth directly in case currentUser var isn't ready yet
+  const authUser = auth.currentUser;
+  const defaultEmail = (authUser && authUser.email) ? authUser.email : (currentUser ? currentUser.email : '');
+
   const emailEl = document.getElementById('digest-email');
   if (emailEl) emailEl.value = saved.customEmail || '';
 
   setDigestToggleUI(saved.enabled || false);
   setCustomEmailToggleUI(useCustom);
   updateEmailPreview(useCustom ? (saved.customEmail || '') : defaultEmail);
+
+  // Also update account email label
+  const ae = document.getElementById('settings-account-email');
+  if (ae && defaultEmail) ae.textContent = 'Signed in as ' + defaultEmail;
 }
 
 function setDigestToggleUI(enabled) {
