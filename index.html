@@ -522,7 +522,29 @@
 </div>
 
 <div id="view-settings" class="view">
-  <header><div><h1>Settings</h1><div class="subtitle">Task frequencies</div></div></header>
+  <header><div><h1>Settings</h1><div class="subtitle">Task frequencies &amp; notifications</div></div></header>
+  <div class="section-title">Email digest</div>
+  <div style="padding:0 16px 8px;">
+    <div style="background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:var(--blur-sm);-webkit-backdrop-filter:var(--blur-sm);border-radius:var(--radius-sm);padding:16px;">
+      <div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;">Weekly summary email</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Sends every Sunday at 9am with overdue and upcoming tasks.</div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);display:block;margin-bottom:8px;">Send digest to</label>
+        <input class="form-input" id="digest-email" type="email" placeholder="your@email.com" style="font-size:14px;">
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+        <label style="font-size:13px;color:var(--text2);flex:1;">Enable weekly digest</label>
+        <div id="digest-toggle" onclick="toggleDigestEnabled()" style="width:48px;height:28px;border-radius:14px;background:var(--glass-border2);cursor:pointer;position:relative;transition:background 0.2s;border:1px solid var(--glass-border2);">
+          <div id="digest-toggle-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--text2);transition:transform 0.2s,background 0.2s;"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="saveDigestSettings()" class="btn-primary" style="flex:1;padding:12px;border-radius:12px;font-size:13px;">Save</button>
+        <button onclick="sendDigestNow()" class="btn" style="flex:1;padding:12px;border-radius:12px;font-size:13px;border-color:var(--glass-border2);color:var(--text2);">Send now</button>
+      </div>
+      <div id="digest-status" style="font-size:12px;text-align:center;margin-top:10px;min-height:18px;color:var(--text2);"></div>
+    </div>
+  </div>
   <div id="settings-list"></div>
 </div>
 
@@ -917,6 +939,140 @@ document.getElementById('theme-icon-dark').style.display = savedTheme==='dark' ?
 document.getElementById('theme-icon-light').style.display = savedTheme==='light' ? 'block' : 'none';
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// ── Email Digest ──────────────────────────────────────────
+const RESEND_API_KEY = 're_VjrM3MAt_3h84AqsLnHzYoAAEQ7JY8GGv';
+const RESEND_FROM    = 'home-tracker@yungnet.ca';
+
+function loadDigestSettings() {
+  const saved = JSON.parse(localStorage.getItem('ht_digest') || '{}');
+  const emailEl = document.getElementById('digest-email');
+  if (emailEl) emailEl.value = saved.email || '';
+  setDigestToggleUI(saved.enabled || false);
+}
+
+function setDigestToggleUI(enabled) {
+  const toggle = document.getElementById('digest-toggle');
+  const knob   = document.getElementById('digest-toggle-knob');
+  if (!toggle || !knob) return;
+  toggle.style.background  = enabled ? 'var(--accent)' : 'var(--glass-border2)';
+  knob.style.transform      = enabled ? 'translateX(20px)' : 'translateX(0)';
+  knob.style.background     = enabled ? '#fff' : 'var(--text2)';
+}
+
+window.toggleDigestEnabled = function() {
+  const saved = JSON.parse(localStorage.getItem('ht_digest') || '{}');
+  saved.enabled = !saved.enabled;
+  localStorage.setItem('ht_digest', JSON.stringify(saved));
+  setDigestToggleUI(saved.enabled);
+};
+
+window.saveDigestSettings = function() {
+  const email = document.getElementById('digest-email').value.trim();
+  const saved = JSON.parse(localStorage.getItem('ht_digest') || '{}');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setDigestStatus('Invalid email address.', 'var(--danger)'); return;
+  }
+  saved.email = email;
+  localStorage.setItem('ht_digest', JSON.stringify(saved));
+  setDigestStatus('Saved!', 'var(--ok)');
+  setTimeout(() => setDigestStatus('', ''), 2500);
+};
+
+function setDigestStatus(msg, color) {
+  const el = document.getElementById('digest-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = color;
+}
+
+function buildDigestHTML() {
+  const tasks   = allTasks.filter(t => t.status === 'active');
+  const overdue = tasks.filter(t => getDaysUntilDue(t) < 0).sort((a,b) => getDaysUntilDue(a)-getDaysUntilDue(b));
+  const soon    = tasks.filter(t => { const d=getDaysUntilDue(t); return d>=0&&d<=14; }).sort((a,b) => getDaysUntilDue(a)-getDaysUntilDue(b));
+  const upcoming= tasks.filter(t => getDaysUntilDue(t)>14).sort((a,b) => getDaysUntilDue(a)-getDaysUntilDue(b));
+
+  const row = (name, label, color) =>
+    `<tr><td style="padding:8px 0;font-size:14px;color:#1a1a2e;font-weight:500;border-bottom:1px solid #e5e7eb;">${name}</td><td style="padding:8px 0;font-size:13px;color:${color};text-align:right;border-bottom:1px solid #e5e7eb;font-weight:600;">${label}</td></tr>`;
+
+  const section = (title, color, rows) => rows.length === 0 ? '' : `
+    <div style="margin-bottom:24px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;font-weight:600;margin-bottom:10px;">${title} (${rows.length})</div>
+      <table style="width:100%;border-collapse:collapse;">${rows}</table>
+    </div>`;
+
+  const overdueRows  = overdue.map(t  => row(t.name, `${Math.abs(getDaysUntilDue(t))}d overdue`, '#dc2626'));
+  const soonRows     = soon.map(t     => row(t.name, getDaysUntilDue(t)===0?'Due today':`Due in ${getDaysUntilDue(t)}d`, '#d97706'));
+  const upcomingRows = upcoming.map(t => row(t.name, `In ${getDaysUntilDue(t)}d`, '#6b7280'));
+
+  const today = new Date().toLocaleDateString('en-CA', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div style="max-width:480px;margin:32px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+  <div style="background:linear-gradient(135deg,#0a0f1e,#0d1128);padding:32px 28px;">
+    <div style="font-family:Georgia,serif;font-size:26px;font-weight:300;color:#ffffff;letter-spacing:-0.5px;">Yung Home <span style="color:#4fc3f7;">Tracker</span></div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;text-transform:uppercase;letter-spacing:0.06em;">Weekly digest · ${today}</div>
+  </div>
+  <div style="padding:28px;">
+    ${overdueRows.length===0 && soonRows.length===0 ? '<div style="text-align:center;padding:24px;color:#6b7280;font-size:14px;">All tasks on track — nothing due this week.</div>' : ''}
+    ${section('Overdue', '#dc2626', overdueRows)}
+    ${section('Due within 2 weeks', '#d97706', soonRows)}
+    ${section('Upcoming', '#6b7280', upcomingRows)}
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e5e7eb;font-size:11px;color:#9ca3af;text-align:center;">
+      Sent from Yung Home Tracker · <a href="https://yungnet.github.io/home-tracker" style="color:#4fc3f7;text-decoration:none;">Open app</a>
+    </div>
+  </div>
+</div></body></html>`;
+}
+
+async function sendDigest(toEmail) {
+  const html = buildDigestHTML();
+  const today = new Date().toLocaleDateString('en-CA', { month:'short', day:'numeric' });
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: `Yung Home Tracker <${RESEND_FROM}>`,
+        to: [toEmail],
+        subject: `🏠 Home Tracker Digest · ${today}`,
+        html
+      })
+    });
+    return res.ok;
+  } catch(e) { console.error(e); return false; }
+}
+
+window.sendDigestNow = async function() {
+  const saved = JSON.parse(localStorage.getItem('ht_digest') || '{}');
+  const email = saved.email || document.getElementById('digest-email').value.trim();
+  if (!email) { setDigestStatus('Enter an email address first.', 'var(--danger)'); return; }
+  setDigestStatus('Sending...', 'var(--text2)');
+  const ok = await sendDigest(email);
+  setDigestStatus(ok ? '✓ Digest sent!' : 'Send failed — check your email address.', ok ? 'var(--ok)' : 'var(--danger)');
+  setTimeout(() => setDigestStatus('', ''), 4000);
+};
+
+// Schedule: check every hour if it's Sunday 9am and digest hasn't been sent today
+function scheduleWeeklyDigest() {
+  setInterval(async () => {
+    const saved = JSON.parse(localStorage.getItem('ht_digest') || '{}');
+    if (!saved.enabled || !saved.email) return;
+    const now = new Date();
+    if (now.getDay() !== 0 || now.getHours() !== 9) return;
+    const todayStr = now.toISOString().split('T')[0];
+    if (saved.lastSent === todayStr) return;
+    const ok = await sendDigest(saved.email);
+    if (ok) {
+      saved.lastSent = todayStr;
+      localStorage.setItem('ht_digest', JSON.stringify(saved));
+    }
+  }, 60 * 60 * 1000); // check every hour
+}
+
+scheduleWeeklyDigest();
+// ── End Email Digest ──────────────────────────────────────
+
 </script>
 </body>
 </html>
