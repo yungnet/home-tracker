@@ -14,131 +14,71 @@
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap');
 
   :root {
-    --bg: #0f0f1a;
-    --surface: #1a1a2e;
-    --surface2: #22223b;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.15);
-    --text: #f0ede6;
-    --text2: #9997a0;
-    --text3: #5f5d68;
+    --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #22223b;
+    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
+    --text: #f0ede6; --text2: #9997a0; --text3: #5f5d68;
     --accent: #c8a96e;
-    --ok: #4ade80;
-    --warn: #fb923c;
-    --danger: #f87171;
-    --ok-bg: rgba(74,222,128,0.1);
-    --warn-bg: rgba(251,146,60,0.1);
-    --danger-bg: rgba(248,113,113,0.1);
+    --ok: #4ade80; --warn: #fb923c; --danger: #f87171;
+    --ok-bg: rgba(74,222,128,0.1); --warn-bg: rgba(251,146,60,0.1); --danger-bg: rgba(248,113,113,0.1);
   }
-
   [data-theme="light"] {
-    --bg: #f5f3ee;
-    --surface: #ffffff;
-    --surface2: #f0ede6;
-    --border: rgba(0,0,0,0.08);
-    --border2: rgba(0,0,0,0.15);
-    --text: #1a1a2e;
-    --text2: #4a4860;
-    --text3: #9997a0;
+    --bg: #f5f3ee; --surface: #ffffff; --surface2: #f0ede6;
+    --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
+    --text: #1a1a2e; --text2: #4a4860; --text3: #9997a0;
     --accent: #a07840;
-    --ok: #16a34a;
-    --warn: #c2410c;
-    --danger: #dc2626;
-    --ok-bg: rgba(22,163,74,0.1);
-    --warn-bg: rgba(194,65,12,0.1);
-    --danger-bg: rgba(220,38,38,0.1);
+    --ok: #16a34a; --warn: #c2410c; --danger: #dc2626;
+    --ok-bg: rgba(22,163,74,0.1); --warn-bg: rgba(194,65,12,0.1); --danger-bg: rgba(220,38,38,0.1);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 480px; margin: 0 auto; padding: 0 0 80px; transition: background 0.2s, color 0.2s; }
 
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 0 80px;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  header {
-    padding: 48px 24px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
+  header { padding: 48px 24px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
   header h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 28px; letter-spacing: -0.5px; }
   header h1 span { color: var(--accent); }
   .subtitle { font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
   .header-actions { display: flex; gap: 8px; align-items: center; padding-top: 4px; }
 
-  .icon-btn {
-    background: none;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    color: var(--text2);
-    cursor: pointer;
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, color 0.15s;
-  }
+  .icon-btn { background: none; border: 1px solid var(--border2); border-radius: 8px; color: var(--text2); cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s; }
   .icon-btn:hover { background: var(--surface2); color: var(--accent); }
   .icon-btn svg { width: 18px; height: 18px; }
 
-  .stats-bar {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--border); border-bottom: 1px solid var(--border);
-  }
+  /* Sync indicator */
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); display: inline-block; margin-left: 8px; vertical-align: middle; transition: background 0.3s; }
+  .sync-dot.synced { background: var(--ok); }
+  .sync-dot.syncing { background: var(--warn); animation: pulse 1s infinite; }
+  .sync-dot.error { background: var(--danger); }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+  .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
   .stat { background: var(--bg); padding: 16px; text-align: center; }
   .stat-num { font-size: 22px; font-weight: 500; font-family: 'Fraunces', serif; }
   .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
-  .stat-num.danger { color: var(--danger); }
-  .stat-num.warn { color: var(--warn); }
-  .stat-num.ok { color: var(--ok); }
+  .stat-num.danger { color: var(--danger); } .stat-num.warn { color: var(--warn); } .stat-num.ok { color: var(--ok); }
 
   .tasks { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
 
-  .task-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    cursor: pointer;
-    transition: border-color 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
+  .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: border-color 0.15s; position: relative; overflow: hidden; }
   .task-card:hover { border-color: var(--border2); }
   .task-card.expanded { border-color: var(--accent); }
-  .task-card::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    border-radius: 12px 0 0 12px;
-  }
+  .task-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 12px 0 0 12px; }
   .task-card.status-ok::before { background: var(--ok); }
   .task-card.status-warn::before { background: var(--warn); }
   .task-card.status-danger::before { background: var(--danger); }
 
   .task-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .task-name { font-size: 14px; font-weight: 500; flex: 1; }
-
-  .task-badge {
-    font-size: 10px; padding: 3px 8px; border-radius: 20px;
-    text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; white-space: nowrap;
-  }
+  .task-badge { font-size: 10px; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; white-space: nowrap; }
   .badge-ok { background: var(--ok-bg); color: var(--ok); }
   .badge-warn { background: var(--warn-bg); color: var(--warn); }
   .badge-danger { background: var(--danger-bg); color: var(--danger); }
-
   .task-meta { font-size: 11px; color: var(--text3); margin-top: 6px; display: flex; gap: 16px; }
-
   .task-details { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
   .task-card.expanded .task-details { display: block; }
-
   .detail-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; color: var(--text2); }
   .detail-row span:last-child { color: var(--text); }
+
+  .notes-display { font-size: 12px; color: var(--text2); font-style: italic; margin-top: 8px; padding: 8px 10px; background: var(--surface2); border-radius: 6px; line-height: 1.5; }
 
   .history-section { margin-top: 12px; }
   .history-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 8px; }
@@ -146,12 +86,7 @@
   .history-item:last-child { border-bottom: none; }
 
   .btn-row { display: flex; gap: 8px; margin-top: 14px; }
-  .btn {
-    flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border2);
-    background: transparent; color: var(--text); font-family: 'DM Mono', monospace;
-    font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
-    transition: background 0.15s;
-  }
+  .btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border2); background: transparent; color: var(--text); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; transition: background 0.15s; }
   .btn:hover { background: var(--surface2); }
   .btn-done { border-color: var(--ok); color: var(--ok); }
   .btn-done:hover { background: var(--ok-bg); }
@@ -159,110 +94,52 @@
   .btn-edit:hover { background: rgba(200,169,110,0.1); }
   .btn-remove { border-color: var(--border2); color: var(--text3); flex: 0; padding: 10px 14px; }
 
-  /* Nav */
-  .nav {
-    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 480px; background: var(--surface);
-    border-top: 1px solid var(--border); display: flex; padding: 8px 0 16px;
-  }
-  .nav-btn {
-    flex: 1; background: none; border: none; color: var(--text3);
-    font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase;
-    letter-spacing: 0.06em; padding: 8px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.15s;
-  }
+  .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: var(--surface); border-top: 1px solid var(--border); display: flex; padding: 8px 0 16px; }
+  .nav-btn { flex: 1; background: none; border: none; color: var(--text3); font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.15s; }
   .nav-btn svg { width: 20px; height: 20px; }
   .nav-btn.active { color: var(--accent); }
 
-  .view { display: none; }
-  .view.active { display: block; }
-
+  .view { display: none; } .view.active { display: block; }
   .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); padding: 16px 16px 8px; }
 
-  /* Settings */
   .settings-group { padding: 0 16px; margin-bottom: 24px; }
-  .setting-item {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
-  }
-  .setting-label { font-size: 13px; }
-  .setting-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .setting-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .setting-label { font-size: 13px; } .setting-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
-  /* Modal */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    z-index: 100; align-items: flex-end; justify-content: center;
-  }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: 20px 20px 0 0; border: 1px solid var(--border2);
-    padding: 24px; width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto;
-  }
+  .modal { background: var(--surface); border-radius: 20px 20px 0 0; border: 1px solid var(--border2); padding: 24px; width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto; }
   .modal h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 20px; margin-bottom: 20px; }
-
   .form-group { margin-bottom: 16px; }
   .form-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 6px; display: block; }
-  .form-input {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace;
-    font-size: 13px; padding: 10px 12px;
-  }
+  .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 10px 12px; }
   .form-input:focus { outline: none; border-color: var(--accent); }
-
+  .form-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 10px 12px; resize: vertical; min-height: 80px; line-height: 1.5; }
+  .form-textarea:focus { outline: none; border-color: var(--accent); }
   .modal-btns { display: flex; gap: 8px; margin-top: 20px; }
-  .btn-primary {
-    flex: 1; padding: 12px; border-radius: 8px; border: none; background: var(--accent);
-    color: var(--bg); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
-    cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .btn-cancel {
-    flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border2);
-    background: transparent; color: var(--text2); font-family: 'DM Mono', monospace;
-    font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
-  }
+  .btn-primary { flex: 1; padding: 12px; border-radius: 8px; border: none; background: var(--accent); color: var(--bg); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; }
+  .btn-cancel { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border2); background: transparent; color: var(--text2); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; }
 
-  /* Context menu */
-  .context-menu {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-    z-index: 200; align-items: flex-end; justify-content: center;
-  }
+  .context-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: flex-end; justify-content: center; }
   .context-menu.open { display: flex; }
-  .context-sheet {
-    background: var(--surface); border-radius: 20px 20px 0 0; border: 1px solid var(--border2);
-    padding: 16px 16px 32px; width: 100%; max-width: 480px;
-  }
-  .context-handle {
-    width: 36px; height: 4px; background: var(--border2); border-radius: 2px;
-    margin: 0 auto 20px;
-  }
+  .context-sheet { background: var(--surface); border-radius: 20px 20px 0 0; border: 1px solid var(--border2); padding: 16px 16px 32px; width: 100%; max-width: 480px; }
+  .context-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 20px; }
   .context-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 12px; padding: 0 4px; }
   .context-task-name { font-size: 15px; font-weight: 500; margin-bottom: 20px; padding: 0 4px; }
-
-  .context-option {
-    display: flex; align-items: center; gap: 14px; padding: 14px 12px;
-    border-radius: 10px; cursor: pointer; transition: background 0.15s;
-    border: 1px solid transparent;
-  }
+  .context-option { display: flex; align-items: center; gap: 14px; padding: 14px 12px; border-radius: 10px; cursor: pointer; transition: background 0.15s; border: 1px solid var(--border); margin-bottom: 6px; }
   .context-option:hover { background: var(--surface2); }
-  .context-option + .context-option { margin-top: 6px; }
-
   .context-option svg { width: 20px; height: 20px; flex-shrink: 0; }
   .context-option-text { font-size: 13px; }
   .context-option-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
-
-  .context-option.archive { border-color: var(--border); }
   .context-option.archive svg { color: var(--accent); }
-  .context-option.delete { border-color: var(--border); }
   .context-option.delete svg { color: var(--danger); }
   .context-option.delete .context-option-text { color: var(--danger); }
 
-  /* History / Digest */
   .history-log { padding: 0 16px; }
   .history-log-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-  .history-log-task { color: var(--text); }
-  .history-log-date { color: var(--text3); }
+  .history-log-task { color: var(--text); } .history-log-date { color: var(--text3); }
 
-  .empty-state { text-align: center; padding: 60px 24px; color: var(--text3); font-size: 12px; }
+  .empty-state { text-align: center; padding: 60px 24px; color: var(--text3); font-size: 12px; line-height: 1.8; }
 
   .digest-section { padding: 16px; }
   .digest-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
@@ -270,68 +147,47 @@
   .digest-item { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); }
   .digest-item:last-child { border-bottom: none; }
 
-  /* Archive / Bin view */
   .bin-section { padding: 0 16px 24px; }
-
-  .archived-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 14px 16px; margin-bottom: 8px; opacity: 0.7;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
+  .archived-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; opacity: 0.7; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .archived-card-info { flex: 1; }
   .archived-card-name { font-size: 13px; font-weight: 500; }
   .archived-card-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-  .bin-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 14px 16px; margin-bottom: 8px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
+  .bin-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .bin-card-info { flex: 1; }
   .bin-card-name { font-size: 13px; font-weight: 500; color: var(--text2); text-decoration: line-through; }
   .bin-card-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
   .bin-actions { display: flex; gap: 6px; }
-  .mini-btn {
-    padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border2);
-    background: transparent; color: var(--text2); font-family: 'DM Mono', monospace;
-    font-size: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em;
-    transition: background 0.15s, color 0.15s;
-  }
-  .mini-btn:hover { background: var(--surface2); }
+  .mini-btn { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--text2); font-family: 'DM Mono', monospace; font-size: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.15s, color 0.15s; }
   .mini-btn.restore { border-color: var(--ok); color: var(--ok); }
   .mini-btn.restore:hover { background: var(--ok-bg); }
   .mini-btn.perm-delete { border-color: var(--danger); color: var(--danger); }
   .mini-btn.perm-delete:hover { background: var(--danger-bg); }
   .mini-btn.unarchive { border-color: var(--accent); color: var(--accent); }
   .mini-btn.unarchive:hover { background: rgba(200,169,110,0.1); }
-
   .empty-bin { text-align: center; padding: 32px 16px; color: var(--text3); font-size: 12px; }
-
-  .danger-action {
-    margin: 16px 0 0;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--danger-bg);
-    background: transparent;
-    color: var(--danger);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    width: 100%;
-    transition: background 0.15s;
-  }
+  .danger-action { margin: 16px 0 0; padding: 12px; border-radius: 8px; border: 1px solid var(--danger-bg); background: transparent; color: var(--danger); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; width: 100%; transition: background 0.15s; }
   .danger-action:hover { background: var(--danger-bg); }
+
+  /* Loading screen */
+  #loading { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; }
+  #loading h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 24px; color: var(--text); }
+  #loading p { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<div id="view-tasks" class="view active">
+<div id="loading">
+  <div class="spinner"></div>
+  <h2>Home <span style="color:var(--accent)">Tracker</span></h2>
+  <p>Connecting to cloud...</p>
+</div>
+
+<div id="view-tasks" class="view">
   <header>
     <div>
-      <h1>Home <span>Tracker</span></h1>
+      <h1>Home <span>Tracker</span><span class="sync-dot" id="sync-dot" title="Sync status"></span></h1>
       <div class="subtitle">Scheduled maintenance</div>
     </div>
     <div class="header-actions">
@@ -414,6 +270,10 @@
       <label class="form-label">Last completed (optional)</label>
       <input class="form-input" id="edit-last" type="date">
     </div>
+    <div class="form-group">
+      <label class="form-label">Notes (optional)</label>
+      <textarea class="form-textarea" id="edit-notes" placeholder="e.g. Use 16x25x1 filter, manual in garage drawer"></textarea>
+    </div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-primary" onclick="saveEdit()">Save</button>
@@ -421,7 +281,7 @@
   </div>
 </div>
 
-<!-- Context menu (archive or delete) -->
+<!-- Context menu -->
 <div class="context-menu" id="context-menu">
   <div class="context-sheet">
     <div class="context-handle"></div>
@@ -429,62 +289,50 @@
     <div class="context-task-name" id="context-task-name"></div>
     <div class="context-option archive" onclick="doArchive()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 12h4"/></svg>
-      <div>
-        <div class="context-option-text">Archive task</div>
-        <div class="context-option-sub">Hide from list, restore anytime</div>
-      </div>
+      <div><div class="context-option-text">Archive task</div><div class="context-option-sub">Hide from list, restore anytime</div></div>
     </div>
     <div class="context-option delete" onclick="doDelete()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-      <div>
-        <div class="context-option-text">Move to bin</div>
-        <div class="context-option-sub">Can be restored from the Archive tab</div>
-      </div>
+      <div><div class="context-option-text">Move to bin</div><div class="context-option-sub">Can be restored from the Archive tab</div></div>
     </div>
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAjIwshyftNqW7lKk9EZ0PhGBALGaULgKk",
+  authDomain: "home-tracker-b3401.firebaseapp.com",
+  projectId: "home-tracker-b3401",
+  storageBucket: "home-tracker-b3401.firebasestorage.app",
+  messagingSenderId: "173077441380",
+  appId: "1:173077441380:web:84653a0fcb97e02dce2871"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const DEFAULT_TASKS = [
-  { id: 1, name: 'Change furnace filter', freqDays: 90, lastDone: null, history: [] },
-  { id: 2, name: 'Clean HRV', freqDays: 180, lastDone: null, history: [] },
-  { id: 3, name: 'Clean dryer lint vent', freqDays: 180, lastDone: null, history: [] },
-  { id: 4, name: 'Clean range hood filter', freqDays: 90, lastDone: null, history: [] },
-  { id: 5, name: 'Replace air purifier filters', freqDays: 180, lastDone: null, history: [] },
-  { id: 6, name: 'Tidy garage', freqDays: 30, lastDone: null, history: [] },
-  { id: 7, name: 'Clean showers', freqDays: 14, lastDone: null, history: [] },
+  { id: 't1', name: 'Change furnace filter', freqDays: 90, lastDone: null, history: [], notes: '', status: 'active' },
+  { id: 't2', name: 'Clean HRV', freqDays: 180, lastDone: null, history: [], notes: '', status: 'active' },
+  { id: 't3', name: 'Clean dryer lint vent', freqDays: 180, lastDone: null, history: [], notes: '', status: 'active' },
+  { id: 't4', name: 'Clean range hood filter', freqDays: 90, lastDone: null, history: [], notes: '', status: 'active' },
+  { id: 't5', name: 'Replace air purifier filters', freqDays: 180, lastDone: null, history: [], notes: '', status: 'active' },
+  { id: 't6', name: 'Tidy garage', freqDays: 30, lastDone: null, history: [], notes: '', status: 'active' },
+  { id: 't7', name: 'Clean showers', freqDays: 14, lastDone: null, history: [], notes: '', status: 'active' },
 ];
 
-function load(key, def) {
-  const s = localStorage.getItem(key);
-  return s ? JSON.parse(s) : (typeof def === 'function' ? def() : def);
-}
-function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
-
-let tasks = load('ht_tasks', () => JSON.parse(JSON.stringify(DEFAULT_TASKS)));
-let archived = load('ht_archived', []);
-let bin = load('ht_bin', []);
+let allTasks = [];
 let editingId = null;
 let expandedId = null;
 let contextId = null;
 
-const savedTheme = localStorage.getItem('ht_theme') || 'dark';
-document.documentElement.setAttribute('data-theme', savedTheme);
-updateThemeIcon(savedTheme);
-
-function toggleTheme() {
-  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('ht_theme', next);
-  updateThemeIcon(next);
-}
-
-function updateThemeIcon(theme) {
-  const d = document.getElementById('theme-icon-dark');
-  const l = document.getElementById('theme-icon-light');
-  if (!d || !l) return;
-  d.style.display = theme === 'dark' ? 'block' : 'none';
-  l.style.display = theme === 'light' ? 'block' : 'none';
+function setSyncDot(state) {
+  const d = document.getElementById('sync-dot');
+  if (!d) return;
+  d.className = 'sync-dot ' + state;
 }
 
 function getDaysUntilDue(task) {
@@ -508,11 +356,28 @@ function formatDate(s) {
 }
 
 function nextId() {
-  const all = [...tasks, ...archived, ...bin];
-  return all.length > 0 ? Math.max(...all.map(t => t.id)) + 1 : 1;
+  const nums = allTasks.map(t => parseInt(t.id.replace('t',''))).filter(n => !isNaN(n));
+  return 't' + (nums.length > 0 ? Math.max(...nums) + 1 : 1);
+}
+
+async function saveTask(task) {
+  setSyncDot('syncing');
+  try {
+    await setDoc(doc(db, 'tasks', task.id), task);
+    setSyncDot('synced');
+  } catch(e) { setSyncDot('error'); console.error(e); }
+}
+
+async function removeTask(id) {
+  setSyncDot('syncing');
+  try {
+    await deleteDoc(doc(db, 'tasks', id));
+    setSyncDot('synced');
+  } catch(e) { setSyncDot('error'); console.error(e); }
 }
 
 function renderTasks() {
+  const tasks = allTasks.filter(t => t.status === 'active');
   const sorted = [...tasks].sort((a, b) => getDaysUntilDue(a) - getDaysUntilDue(b));
   let overdue = 0, dueSoon = 0, ok = 0;
   sorted.forEach(t => {
@@ -525,7 +390,7 @@ function renderTasks() {
 
   const list = document.getElementById('task-list');
   if (sorted.length === 0) {
-    list.innerHTML = '<div class="empty-state">No active tasks.<br><br>Add one with the + button.</div>';
+    list.innerHTML = '<div class="empty-state">No active tasks.<br>Add one with the + button.</div>';
     return;
   }
   list.innerHTML = sorted.map(task => {
@@ -533,7 +398,7 @@ function renderTasks() {
     const status = getStatus(days);
     const expanded = expandedId === task.id;
     const recentHistory = (task.history || []).slice(-3).reverse();
-    return `<div class="task-card status-${status} ${expanded ? 'expanded' : ''}" onclick="toggleExpand(${task.id})">
+    return `<div class="task-card status-${status} ${expanded ? 'expanded' : ''}" onclick="window._toggleExpand('${task.id}')">
       <div class="task-top">
         <div class="task-name">${task.name}</div>
         <div class="task-badge badge-${status}">${getBadgeText(days)}</div>
@@ -546,201 +411,32 @@ function renderTasks() {
         <div class="detail-row"><span>Frequency</span><span>Every ${task.freqDays} days</span></div>
         <div class="detail-row"><span>Last done</span><span>${formatDate(task.lastDone)}</span></div>
         <div class="detail-row"><span>Next due</span><span>${task.lastDone ? formatDate(new Date(new Date(task.lastDone).getTime() + task.freqDays * 86400000).toISOString().split('T')[0]) : '—'}</span></div>
+        ${task.notes ? `<div class="notes-display">${task.notes}</div>` : ''}
         ${recentHistory.length > 0 ? `<div class="history-section"><div class="history-title">Recent history</div>${recentHistory.map(h => `<div class="history-item"><span>${formatDate(h)}</span><span>✓</span></div>`).join('')}</div>` : ''}
         <div class="btn-row">
-          <button class="btn btn-done" onclick="event.stopPropagation(); markDone(${task.id})">✓ Mark done</button>
-          <button class="btn btn-edit" onclick="event.stopPropagation(); openEdit(${task.id})">Edit</button>
-          <button class="btn btn-remove" onclick="event.stopPropagation(); openContext(${task.id})" title="Archive or delete">✕</button>
+          <button class="btn btn-done" onclick="event.stopPropagation(); window._markDone('${task.id}')">✓ Mark done</button>
+          <button class="btn btn-edit" onclick="event.stopPropagation(); window._openEdit('${task.id}')">Edit</button>
+          <button class="btn btn-remove" onclick="event.stopPropagation(); window._openContext('${task.id}')" title="Archive or delete">✕</button>
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-function toggleExpand(id) {
-  expandedId = expandedId === id ? null : id;
-  renderTasks();
-}
-
-function markDone(id) {
-  const task = tasks.find(t => t.id === id);
-  const today = new Date().toISOString().split('T')[0];
-  if (!task.history) task.history = [];
-  task.history.push(today);
-  task.lastDone = today;
-  save('ht_tasks', tasks);
-  renderTasks();
-  renderHistory();
-  renderDigest();
-}
-
-function openContext(id) {
-  contextId = id;
-  const task = tasks.find(t => t.id === id);
-  document.getElementById('context-task-name').textContent = task.name;
-  document.getElementById('context-menu').classList.add('open');
-}
-
-function closeContext() {
-  document.getElementById('context-menu').classList.remove('open');
-  contextId = null;
-}
-
-function doArchive() {
-  const task = tasks.find(t => t.id === contextId);
-  task.archivedAt = new Date().toISOString().split('T')[0];
-  archived.push(task);
-  tasks = tasks.filter(t => t.id !== contextId);
-  if (expandedId === contextId) expandedId = null;
-  save('ht_tasks', tasks);
-  save('ht_archived', archived);
-  closeContext();
-  renderTasks();
-  renderBin();
-}
-
-function doDelete() {
-  const task = tasks.find(t => t.id === contextId);
-  task.deletedAt = new Date().toISOString().split('T')[0];
-  bin.push(task);
-  tasks = tasks.filter(t => t.id !== contextId);
-  if (expandedId === contextId) expandedId = null;
-  save('ht_tasks', tasks);
-  save('ht_bin', bin);
-  closeContext();
-  renderTasks();
-  renderBin();
-}
-
-document.getElementById('context-menu').addEventListener('click', function(e) {
-  if (e.target === this) closeContext();
-});
-
-function openAdd() {
-  editingId = null;
-  document.getElementById('modal-title').textContent = 'Add Task';
-  document.getElementById('edit-name').value = '';
-  document.getElementById('edit-freq').value = '';
-  document.getElementById('edit-last').value = '';
-  document.getElementById('edit-modal').classList.add('open');
-}
-
-function openEdit(id) {
-  editingId = id;
-  const task = tasks.find(t => t.id === id);
-  document.getElementById('modal-title').textContent = 'Edit Task';
-  document.getElementById('edit-name').value = task.name;
-  document.getElementById('edit-freq').value = task.freqDays;
-  document.getElementById('edit-last').value = task.lastDone || '';
-  document.getElementById('edit-modal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('edit-modal').classList.remove('open');
-  editingId = null;
-}
-
-function saveEdit() {
-  const name = document.getElementById('edit-name').value.trim();
-  const freq = parseInt(document.getElementById('edit-freq').value);
-  const last = document.getElementById('edit-last').value || null;
-  if (!name || !freq || freq < 1) return;
-  if (editingId !== null) {
-    const task = tasks.find(t => t.id === editingId);
-    task.name = name; task.freqDays = freq; task.lastDone = last;
-  } else {
-    tasks.push({ id: nextId(), name, freqDays: freq, lastDone: last, history: [] });
-  }
-  save('ht_tasks', tasks);
-  closeModal();
-  renderTasks();
-  renderSettings();
-}
-
-function unarchive(id) {
-  const task = archived.find(t => t.id === id);
-  delete task.archivedAt;
-  tasks.push(task);
-  archived = archived.filter(t => t.id !== id);
-  save('ht_tasks', tasks);
-  save('ht_archived', archived);
-  renderTasks();
-  renderBin();
-}
-
-function restoreFromBin(id) {
-  const task = bin.find(t => t.id === id);
-  delete task.deletedAt;
-  tasks.push(task);
-  bin = bin.filter(t => t.id !== id);
-  save('ht_tasks', tasks);
-  save('ht_bin', bin);
-  renderTasks();
-  renderBin();
-}
-
-function permDelete(id) {
-  if (!confirm('Permanently delete this task? This cannot be undone.')) return;
-  bin = bin.filter(t => t.id !== id);
-  save('ht_bin', bin);
-  renderBin();
-}
-
-function emptyBin() {
-  if (!confirm('Permanently delete all items in the bin?')) return;
-  bin = [];
-  save('ht_bin', bin);
-  renderBin();
-}
-
-function renderBin() {
-  const archList = document.getElementById('archived-list');
-  const binList = document.getElementById('bin-list');
-
-  if (archived.length === 0) {
-    archList.innerHTML = '<div class="empty-bin">No archived tasks</div>';
-  } else {
-    archList.innerHTML = archived.map(t => `
-      <div class="archived-card">
-        <div class="archived-card-info">
-          <div class="archived-card-name">${t.name}</div>
-          <div class="archived-card-meta">Every ${t.freqDays}d · Archived ${formatDate(t.archivedAt)}</div>
-        </div>
-        <button class="mini-btn unarchive" onclick="unarchive(${t.id})">Restore</button>
-      </div>`).join('');
-  }
-
-  if (bin.length === 0) {
-    binList.innerHTML = '<div class="empty-bin">Bin is empty</div>';
-  } else {
-    binList.innerHTML = bin.map(t => `
-      <div class="bin-card">
-        <div class="bin-card-info">
-          <div class="bin-card-name">${t.name}</div>
-          <div class="bin-card-meta">Deleted ${formatDate(t.deletedAt)}</div>
-        </div>
-        <div class="bin-actions">
-          <button class="mini-btn restore" onclick="restoreFromBin(${t.id})">Restore</button>
-          <button class="mini-btn perm-delete" onclick="permDelete(${t.id})">Delete</button>
-        </div>
-      </div>`).join('') +
-      `<button class="danger-action" onclick="emptyBin()">Empty bin</button>`;
-  }
-}
-
 function renderHistory() {
   const log = document.getElementById('history-log');
   const all = [];
-  tasks.forEach(t => (t.history || []).forEach(d => all.push({ name: t.name, date: d })));
+  allTasks.filter(t => t.status === 'active').forEach(t => (t.history || []).forEach(d => all.push({ name: t.name, date: d })));
   all.sort((a, b) => new Date(b.date) - new Date(a.date));
   if (all.length === 0) {
-    log.innerHTML = '<div class="empty-state">No history yet.<br><br>Mark tasks as done to build your log.</div>';
+    log.innerHTML = '<div class="empty-state">No history yet.<br>Mark tasks as done to build your log.</div>';
     return;
   }
   log.innerHTML = all.map(h => `<div class="history-log-item"><span class="history-log-task">${h.name}</span><span class="history-log-date">${formatDate(h.date)}</span></div>`).join('');
 }
 
 function renderDigest() {
+  const tasks = allTasks.filter(t => t.status === 'active');
   const section = document.getElementById('digest-section');
   const overdue = tasks.filter(t => getDaysUntilDue(t) < 0).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
   const dueSoon = tasks.filter(t => { const d = getDaysUntilDue(t); return d >= 0 && d <= 14; }).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
@@ -753,29 +449,202 @@ function renderDigest() {
   section.innerHTML = html;
 }
 
+function renderBin() {
+  const archived = allTasks.filter(t => t.status === 'archived');
+  const bin = allTasks.filter(t => t.status === 'deleted');
+  const archList = document.getElementById('archived-list');
+  const binList = document.getElementById('bin-list');
+
+  archList.innerHTML = archived.length === 0
+    ? '<div class="empty-bin">No archived tasks</div>'
+    : archived.map(t => `<div class="archived-card"><div class="archived-card-info"><div class="archived-card-name">${t.name}</div><div class="archived-card-meta">Every ${t.freqDays}d · Archived ${formatDate(t.archivedAt)}</div></div><button class="mini-btn unarchive" onclick="window._unarchive('${t.id}')">Restore</button></div>`).join('');
+
+  binList.innerHTML = bin.length === 0
+    ? '<div class="empty-bin">Bin is empty</div>'
+    : bin.map(t => `<div class="bin-card"><div class="bin-card-info"><div class="bin-card-name">${t.name}</div><div class="bin-card-meta">Deleted ${formatDate(t.deletedAt)}</div></div><div class="bin-actions"><button class="mini-btn restore" onclick="window._restoreFromBin('${t.id}')">Restore</button><button class="mini-btn perm-delete" onclick="window._permDelete('${t.id}')">Delete</button></div></div>`).join('')
+      + `<button class="danger-action" onclick="window._emptyBin()">Empty bin</button>`;
+}
+
 function renderSettings() {
+  const tasks = allTasks.filter(t => t.status === 'active');
   document.getElementById('settings-list').innerHTML =
     '<div class="section-title">Tap edit to adjust a task</div><div class="settings-group">' +
-    tasks.map(task => `<div class="setting-item"><div><div class="setting-label">${task.name}</div><div class="setting-sub">Every ${task.freqDays} days</div></div><button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="openEdit(${task.id})">Edit</button></div>`).join('') +
+    tasks.map(t => `<div class="setting-item"><div><div class="setting-label">${t.name}</div><div class="setting-sub">Every ${t.freqDays} days</div></div><button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="window._openEdit('${t.id}')">Edit</button></div>`).join('') +
     '</div>';
 }
 
-function showView(name, btn) {
+function renderAll() {
+  renderTasks();
+  renderHistory();
+  renderDigest();
+  renderBin();
+  renderSettings();
+}
+
+// Expose to global scope for inline onclick handlers
+window._toggleExpand = (id) => { expandedId = expandedId === id ? null : id; renderTasks(); };
+
+window._markDone = async (id) => {
+  const task = allTasks.find(t => t.id === id);
+  const today = new Date().toISOString().split('T')[0];
+  if (!task.history) task.history = [];
+  task.history.push(today);
+  task.lastDone = today;
+  await saveTask(task);
+};
+
+window._openEdit = (id) => {
+  editingId = id;
+  const task = allTasks.find(t => t.id === id);
+  document.getElementById('modal-title').textContent = 'Edit Task';
+  document.getElementById('edit-name').value = task.name;
+  document.getElementById('edit-freq').value = task.freqDays;
+  document.getElementById('edit-last').value = task.lastDone || '';
+  document.getElementById('edit-notes').value = task.notes || '';
+  document.getElementById('edit-modal').classList.add('open');
+};
+
+window._openContext = (id) => {
+  contextId = id;
+  const task = allTasks.find(t => t.id === id);
+  document.getElementById('context-task-name').textContent = task.name;
+  document.getElementById('context-menu').classList.add('open');
+};
+
+window._unarchive = async (id) => {
+  const task = allTasks.find(t => t.id === id);
+  task.status = 'active';
+  delete task.archivedAt;
+  await saveTask(task);
+};
+
+window._restoreFromBin = async (id) => {
+  const task = allTasks.find(t => t.id === id);
+  task.status = 'active';
+  delete task.deletedAt;
+  await saveTask(task);
+};
+
+window._permDelete = async (id) => {
+  if (!confirm('Permanently delete this task? This cannot be undone.')) return;
+  allTasks = allTasks.filter(t => t.id !== id);
+  await removeTask(id);
+};
+
+window._emptyBin = async () => {
+  if (!confirm('Permanently delete all items in the bin?')) return;
+  const bin = allTasks.filter(t => t.status === 'deleted');
+  for (const t of bin) await removeTask(t.id);
+};
+
+window.openAdd = () => {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Add Task';
+  document.getElementById('edit-name').value = '';
+  document.getElementById('edit-freq').value = '';
+  document.getElementById('edit-last').value = '';
+  document.getElementById('edit-notes').value = '';
+  document.getElementById('edit-modal').classList.add('open');
+};
+
+window.closeModal = () => {
+  document.getElementById('edit-modal').classList.remove('open');
+  editingId = null;
+};
+
+window.saveEdit = async () => {
+  const name = document.getElementById('edit-name').value.trim();
+  const freq = parseInt(document.getElementById('edit-freq').value);
+  const last = document.getElementById('edit-last').value || null;
+  const notes = document.getElementById('edit-notes').value.trim();
+  if (!name || !freq || freq < 1) return;
+  if (editingId) {
+    const task = allTasks.find(t => t.id === editingId);
+    task.name = name; task.freqDays = freq; task.lastDone = last; task.notes = notes;
+    await saveTask(task);
+  } else {
+    const task = { id: nextId(), name, freqDays: freq, lastDone: last, notes, history: [], status: 'active' };
+    await saveTask(task);
+  }
+  window.closeModal();
+};
+
+window.doArchive = async () => {
+  const task = allTasks.find(t => t.id === contextId);
+  task.status = 'archived';
+  task.archivedAt = new Date().toISOString().split('T')[0];
+  if (expandedId === contextId) expandedId = null;
+  closeContext();
+  await saveTask(task);
+};
+
+window.doDelete = async () => {
+  const task = allTasks.find(t => t.id === contextId);
+  task.status = 'deleted';
+  task.deletedAt = new Date().toISOString().split('T')[0];
+  if (expandedId === contextId) expandedId = null;
+  closeContext();
+  await saveTask(task);
+};
+
+function closeContext() {
+  document.getElementById('context-menu').classList.remove('open');
+  contextId = null;
+}
+document.getElementById('context-menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeContext(); });
+
+window.showView = (name, btn) => {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
   btn.classList.add('active');
-  if (name === 'history') renderHistory();
-  if (name === 'digest') renderDigest();
-  if (name === 'bin') renderBin();
-  if (name === 'settings') renderSettings();
+};
+
+window.toggleTheme = () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('ht_theme', next);
+  document.getElementById('theme-icon-dark').style.display = next === 'dark' ? 'block' : 'none';
+  document.getElementById('theme-icon-light').style.display = next === 'light' ? 'block' : 'none';
+};
+
+// Apply saved theme
+const savedTheme = localStorage.getItem('ht_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('theme-icon-dark').style.display = savedTheme === 'dark' ? 'block' : 'none';
+document.getElementById('theme-icon-light').style.display = savedTheme === 'light' ? 'block' : 'none';
+
+// Real-time Firestore listener
+async function init() {
+  try {
+    // Seed defaults if collection is empty
+    const snap = await getDocs(collection(db, 'tasks'));
+    if (snap.empty) {
+      for (const t of DEFAULT_TASKS) await setDoc(doc(db, 'tasks', t.id), t);
+    }
+
+    // Live listener
+    onSnapshot(collection(db, 'tasks'), (snapshot) => {
+      allTasks = snapshot.docs.map(d => d.data());
+      setSyncDot('synced');
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('view-tasks').classList.add('active');
+      renderAll();
+    }, (err) => {
+      setSyncDot('error');
+      console.error(err);
+    });
+
+  } catch(e) {
+    setSyncDot('error');
+    document.getElementById('loading').innerHTML = '<div style="text-align:center;padding:24px;color:var(--danger);font-size:13px;">Could not connect to Firebase.<br><br>Check your internet connection.</div>';
+    console.error(e);
+  }
 }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 
-renderTasks();
+init();
 </script>
 </body>
 </html>
