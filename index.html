@@ -33,6 +33,38 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 480px; margin: 0 auto; padding: 0 0 80px; transition: background 0.2s, color 0.2s; }
 
+  /* Loading / Sign-in screens */
+  .fullscreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; padding: 40px; max-width: 480px; margin: 0 auto; }
+  .fullscreen h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 32px; color: var(--text); text-align: center; }
+  .fullscreen p { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; }
+  .fullscreen .tagline { font-size: 13px; color: var(--text2); text-transform: none; letter-spacing: 0; margin-top: -8px; text-align: center; line-height: 1.6; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .google-btn {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 14px 24px; cursor: pointer;
+    font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text);
+    transition: background 0.15s, border-color 0.15s; margin-top: 8px;
+    width: 100%; justify-content: center;
+  }
+  .google-btn:hover { background: var(--surface2); border-color: var(--accent); }
+  .google-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .sign-in-divider { width: 100%; height: 1px; background: var(--border); margin: 8px 0; }
+
+  .access-denied {
+    background: var(--danger-bg); border: 1px solid var(--danger);
+    border-radius: 10px; padding: 16px; text-align: center;
+    font-size: 12px; color: var(--danger); line-height: 1.6; width: 100%;
+  }
+
+  .signed-in-as {
+    font-size: 11px; color: var(--text3); text-align: center; margin-top: 4px;
+  }
+
+  /* Header */
   header { padding: 48px 24px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
   header h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 28px; letter-spacing: -0.5px; }
   header h1 span { color: var(--accent); }
@@ -43,7 +75,6 @@
   .icon-btn:hover { background: var(--surface2); color: var(--accent); }
   .icon-btn svg { width: 18px; height: 18px; }
 
-  /* Sync indicator */
   .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); display: inline-block; margin-left: 8px; vertical-align: middle; transition: background 0.3s; }
   .sync-dot.synced { background: var(--ok); }
   .sync-dot.syncing { background: var(--warn); animation: pulse 1s infinite; }
@@ -57,7 +88,6 @@
   .stat-num.danger { color: var(--danger); } .stat-num.warn { color: var(--warn); } .stat-num.ok { color: var(--ok); }
 
   .tasks { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
-
   .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: border-color 0.15s; position: relative; overflow: hidden; }
   .task-card:hover { border-color: var(--border2); }
   .task-card.expanded { border-color: var(--accent); }
@@ -77,7 +107,6 @@
   .task-card.expanded .task-details { display: block; }
   .detail-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; color: var(--text2); }
   .detail-row span:last-child { color: var(--text); }
-
   .notes-display { font-size: 12px; color: var(--text2); font-style: italic; margin-top: 8px; padding: 8px 10px; background: var(--surface2); border-radius: 6px; line-height: 1.5; }
 
   .history-section { margin-top: 12px; }
@@ -138,7 +167,6 @@
   .history-log { padding: 0 16px; }
   .history-log-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
   .history-log-task { color: var(--text); } .history-log-date { color: var(--text3); }
-
   .empty-state { text-align: center; padding: 60px 24px; color: var(--text3); font-size: 12px; line-height: 1.8; }
 
   .digest-section { padding: 16px; }
@@ -167,30 +195,51 @@
   .empty-bin { text-align: center; padding: 32px 16px; color: var(--text3); font-size: 12px; }
   .danger-action { margin: 16px 0 0; padding: 12px; border-radius: 8px; border: 1px solid var(--danger-bg); background: transparent; color: var(--danger); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; width: 100%; transition: background 0.15s; }
   .danger-action:hover { background: var(--danger-bg); }
-
-  /* Loading screen */
-  #loading { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; }
-  #loading h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 24px; color: var(--text); }
-  #loading p { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
-  .spinner { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<div id="loading">
+<!-- Loading screen -->
+<div class="fullscreen" id="screen-loading">
   <div class="spinner"></div>
   <h2>Home <span style="color:var(--accent)">Tracker</span></h2>
-  <p>Connecting to cloud...</p>
+  <p>Connecting...</p>
 </div>
 
+<!-- Sign-in screen -->
+<div class="fullscreen" id="screen-signin" style="display:none">
+  <h2>Home <span style="color:var(--accent)">Tracker</span></h2>
+  <p style="margin-bottom:8px">Scheduled maintenance</p>
+  <div class="sign-in-divider"></div>
+  <button class="google-btn" onclick="window._signIn()">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    Sign in with Google
+  </button>
+  <p style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center;line-height:1.6">Your data is private and encrypted.<br>No Firebase account needed.</p>
+</div>
+
+<!-- Access denied screen -->
+<div class="fullscreen" id="screen-denied" style="display:none">
+  <h2>Home <span style="color:var(--accent)">Tracker</span></h2>
+  <div class="access-denied">This app is private.<br><br>Your account doesn't have access.<br>Contact the app owner to be added.</div>
+  <p class="signed-in-as" id="denied-email"></p>
+  <button class="google-btn" onclick="window._signOut()" style="margin-top:16px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+    Sign out
+  </button>
+</div>
+
+<!-- Main app -->
 <div id="view-tasks" class="view">
   <header>
     <div>
-      <h1>Home <span>Tracker</span><span class="sync-dot" id="sync-dot" title="Sync status"></span></h1>
-      <div class="subtitle">Scheduled maintenance</div>
+      <h1>Home <span>Tracker</span><span class="sync-dot" id="sync-dot"></span></h1>
+      <div class="subtitle" id="subtitle-email"></div>
     </div>
     <div class="header-actions">
+      <button class="icon-btn" onclick="window._signOut()" title="Sign out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      </button>
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">
         <svg id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -231,7 +280,7 @@
   <div id="settings-list"></div>
 </div>
 
-<nav class="nav">
+<nav class="nav" id="main-nav" style="display:none">
   <button class="nav-btn active" onclick="showView('tasks', this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
     Tasks
@@ -258,26 +307,11 @@
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <h2 id="modal-title">Add Task</h2>
-    <div class="form-group">
-      <label class="form-label">Task name</label>
-      <input class="form-input" id="edit-name" type="text" placeholder="e.g. Clean gutters">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Frequency (days)</label>
-      <input class="form-input" id="edit-freq" type="number" min="1" placeholder="e.g. 90">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Last completed (optional)</label>
-      <input class="form-input" id="edit-last" type="date">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Notes (optional)</label>
-      <textarea class="form-textarea" id="edit-notes" placeholder="e.g. Use 16x25x1 filter, manual in garage drawer"></textarea>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-primary" onclick="saveEdit()">Save</button>
-    </div>
+    <div class="form-group"><label class="form-label">Task name</label><input class="form-input" id="edit-name" type="text" placeholder="e.g. Clean gutters"></div>
+    <div class="form-group"><label class="form-label">Frequency (days)</label><input class="form-input" id="edit-freq" type="number" min="1" placeholder="e.g. 90"></div>
+    <div class="form-group"><label class="form-label">Last completed (optional)</label><input class="form-input" id="edit-last" type="date"></div>
+    <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-textarea" id="edit-notes" placeholder="e.g. Use 16x25x1 filter, manual in garage drawer"></textarea></div>
+    <div class="modal-btns"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-primary" onclick="saveEdit()">Save</button></div>
   </div>
 </div>
 
@@ -301,6 +335,7 @@
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjIwshyftNqW7lKk9EZ0PhGBALGaULgKk",
@@ -311,8 +346,20 @@ const firebaseConfig = {
   appId: "1:173077441380:web:84653a0fcb97e02dce2871"
 };
 
+// ====================================================
+// ALLOWED USERS — add your UID and your wife's UID here
+// after you both sign in for the first time
+// ====================================================
+const ALLOWED_UIDS = [
+  // 'paste-your-uid-here',
+  // 'paste-wifes-uid-here',
+];
+// ====================================================
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 const DEFAULT_TASKS = [
   { id: 't1', name: 'Change furnace filter', freqDays: 90, lastDone: null, history: [], notes: '', status: 'active' },
@@ -328,11 +375,15 @@ let allTasks = [];
 let editingId = null;
 let expandedId = null;
 let contextId = null;
+let unsubscribe = null;
+let currentUser = null;
+
+function show(id) { document.getElementById(id).style.display = 'flex'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
 
 function setSyncDot(state) {
   const d = document.getElementById('sync-dot');
-  if (!d) return;
-  d.className = 'sync-dot ' + state;
+  if (d) d.className = 'sync-dot ' + state;
 }
 
 function getDaysUntilDue(task) {
@@ -340,21 +391,17 @@ function getDaysUntilDue(task) {
   const due = new Date(new Date(task.lastDone).getTime() + task.freqDays * 86400000);
   return Math.round((due - new Date()) / 86400000);
 }
-
 function getStatus(d) { return d < 0 ? 'danger' : d <= 7 ? 'warn' : 'ok'; }
-
 function getBadgeText(d) {
   if (d < 0) return `${Math.abs(d)}d overdue`;
   if (d === 0) return 'due today';
   if (d <= 7) return `due in ${d}d`;
   return `${d}d left`;
 }
-
 function formatDate(s) {
   if (!s) return 'Never';
   return new Date(s).toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
 }
-
 function nextId() {
   const nums = allTasks.map(t => parseInt(t.id.replace('t',''))).filter(n => !isNaN(n));
   return 't' + (nums.length > 0 ? Math.max(...nums) + 1 : 1);
@@ -362,61 +409,43 @@ function nextId() {
 
 async function saveTask(task) {
   setSyncDot('syncing');
-  try {
-    await setDoc(doc(db, 'tasks', task.id), task);
-    setSyncDot('synced');
-  } catch(e) { setSyncDot('error'); console.error(e); }
+  try { await setDoc(doc(db, 'tasks', task.id), task); setSyncDot('synced'); }
+  catch(e) { setSyncDot('error'); console.error(e); }
 }
-
 async function removeTask(id) {
   setSyncDot('syncing');
-  try {
-    await deleteDoc(doc(db, 'tasks', id));
-    setSyncDot('synced');
-  } catch(e) { setSyncDot('error'); console.error(e); }
+  try { await deleteDoc(doc(db, 'tasks', id)); setSyncDot('synced'); }
+  catch(e) { setSyncDot('error'); console.error(e); }
 }
 
 function renderTasks() {
   const tasks = allTasks.filter(t => t.status === 'active');
   const sorted = [...tasks].sort((a, b) => getDaysUntilDue(a) - getDaysUntilDue(b));
   let overdue = 0, dueSoon = 0, ok = 0;
-  sorted.forEach(t => {
-    const s = getStatus(getDaysUntilDue(t));
-    if (s === 'danger') overdue++; else if (s === 'warn') dueSoon++; else ok++;
-  });
+  sorted.forEach(t => { const s = getStatus(getDaysUntilDue(t)); if (s==='danger') overdue++; else if (s==='warn') dueSoon++; else ok++; });
   document.getElementById('stat-overdue').textContent = overdue;
   document.getElementById('stat-due').textContent = dueSoon;
   document.getElementById('stat-ok').textContent = ok;
-
   const list = document.getElementById('task-list');
-  if (sorted.length === 0) {
-    list.innerHTML = '<div class="empty-state">No active tasks.<br>Add one with the + button.</div>';
-    return;
-  }
+  if (!sorted.length) { list.innerHTML = '<div class="empty-state">No active tasks.<br>Add one with the + button.</div>'; return; }
   list.innerHTML = sorted.map(task => {
     const days = getDaysUntilDue(task);
     const status = getStatus(days);
     const expanded = expandedId === task.id;
     const recentHistory = (task.history || []).slice(-3).reverse();
     return `<div class="task-card status-${status} ${expanded ? 'expanded' : ''}" onclick="window._toggleExpand('${task.id}')">
-      <div class="task-top">
-        <div class="task-name">${task.name}</div>
-        <div class="task-badge badge-${status}">${getBadgeText(days)}</div>
-      </div>
-      <div class="task-meta">
-        <span>Every ${task.freqDays}d</span>
-        <span>Last: ${formatDate(task.lastDone)}</span>
-      </div>
+      <div class="task-top"><div class="task-name">${task.name}</div><div class="task-badge badge-${status}">${getBadgeText(days)}</div></div>
+      <div class="task-meta"><span>Every ${task.freqDays}d</span><span>Last: ${formatDate(task.lastDone)}</span></div>
       <div class="task-details">
         <div class="detail-row"><span>Frequency</span><span>Every ${task.freqDays} days</span></div>
         <div class="detail-row"><span>Last done</span><span>${formatDate(task.lastDone)}</span></div>
-        <div class="detail-row"><span>Next due</span><span>${task.lastDone ? formatDate(new Date(new Date(task.lastDone).getTime() + task.freqDays * 86400000).toISOString().split('T')[0]) : '—'}</span></div>
+        <div class="detail-row"><span>Next due</span><span>${task.lastDone ? formatDate(new Date(new Date(task.lastDone).getTime() + task.freqDays*86400000).toISOString().split('T')[0]) : '—'}</span></div>
         ${task.notes ? `<div class="notes-display">${task.notes}</div>` : ''}
-        ${recentHistory.length > 0 ? `<div class="history-section"><div class="history-title">Recent history</div>${recentHistory.map(h => `<div class="history-item"><span>${formatDate(h)}</span><span>✓</span></div>`).join('')}</div>` : ''}
+        ${recentHistory.length ? `<div class="history-section"><div class="history-title">Recent history</div>${recentHistory.map(h=>`<div class="history-item"><span>${formatDate(h)}</span><span>✓</span></div>`).join('')}</div>` : ''}
         <div class="btn-row">
-          <button class="btn btn-done" onclick="event.stopPropagation(); window._markDone('${task.id}')">✓ Mark done</button>
-          <button class="btn btn-edit" onclick="event.stopPropagation(); window._openEdit('${task.id}')">Edit</button>
-          <button class="btn btn-remove" onclick="event.stopPropagation(); window._openContext('${task.id}')" title="Archive or delete">✕</button>
+          <button class="btn btn-done" onclick="event.stopPropagation();window._markDone('${task.id}')">✓ Mark done</button>
+          <button class="btn btn-edit" onclick="event.stopPropagation();window._openEdit('${task.id}')">Edit</button>
+          <button class="btn btn-remove" onclick="event.stopPropagation();window._openContext('${task.id}')">✕</button>
         </div>
       </div>
     </div>`;
@@ -426,62 +455,108 @@ function renderTasks() {
 function renderHistory() {
   const log = document.getElementById('history-log');
   const all = [];
-  allTasks.filter(t => t.status === 'active').forEach(t => (t.history || []).forEach(d => all.push({ name: t.name, date: d })));
-  all.sort((a, b) => new Date(b.date) - new Date(a.date));
-  if (all.length === 0) {
-    log.innerHTML = '<div class="empty-state">No history yet.<br>Mark tasks as done to build your log.</div>';
-    return;
-  }
-  log.innerHTML = all.map(h => `<div class="history-log-item"><span class="history-log-task">${h.name}</span><span class="history-log-date">${formatDate(h.date)}</span></div>`).join('');
+  allTasks.filter(t=>t.status==='active').forEach(t=>(t.history||[]).forEach(d=>all.push({name:t.name,date:d})));
+  all.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if (!all.length) { log.innerHTML='<div class="empty-state">No history yet.<br>Mark tasks as done to build your log.</div>'; return; }
+  log.innerHTML = all.map(h=>`<div class="history-log-item"><span class="history-log-task">${h.name}</span><span class="history-log-date">${formatDate(h.date)}</span></div>`).join('');
 }
 
 function renderDigest() {
-  const tasks = allTasks.filter(t => t.status === 'active');
+  const tasks = allTasks.filter(t=>t.status==='active');
   const section = document.getElementById('digest-section');
-  const overdue = tasks.filter(t => getDaysUntilDue(t) < 0).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
-  const dueSoon = tasks.filter(t => { const d = getDaysUntilDue(t); return d >= 0 && d <= 14; }).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
-  const upcoming = tasks.filter(t => getDaysUntilDue(t) > 14).sort((a,b) => getDaysUntilDue(a) - getDaysUntilDue(b));
-  let html = '';
-  if (overdue.length > 0) html += `<div class="digest-card"><h3>Overdue (${overdue.length})</h3>${overdue.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--danger)">${Math.abs(getDaysUntilDue(t))}d ago</span></div>`).join('')}</div>`;
-  if (dueSoon.length > 0) html += `<div class="digest-card"><h3>Due within 2 weeks (${dueSoon.length})</h3>${dueSoon.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--warn)">${getDaysUntilDue(t) === 0 ? 'Today' : 'In ' + getDaysUntilDue(t) + 'd'}</span></div>`).join('')}</div>`;
-  if (upcoming.length > 0) html += `<div class="digest-card"><h3>Upcoming</h3>${upcoming.map(t => `<div class="digest-item"><span>${t.name}</span><span style="color:var(--text3)">In ${getDaysUntilDue(t)}d</span></div>`).join('')}</div>`;
-  if (!html) html = '<div class="empty-state">All tasks on track</div>';
-  section.innerHTML = html;
+  const overdue = tasks.filter(t=>getDaysUntilDue(t)<0).sort((a,b)=>getDaysUntilDue(a)-getDaysUntilDue(b));
+  const dueSoon = tasks.filter(t=>{const d=getDaysUntilDue(t);return d>=0&&d<=14;}).sort((a,b)=>getDaysUntilDue(a)-getDaysUntilDue(b));
+  const upcoming = tasks.filter(t=>getDaysUntilDue(t)>14).sort((a,b)=>getDaysUntilDue(a)-getDaysUntilDue(b));
+  let html='';
+  if (overdue.length) html+=`<div class="digest-card"><h3>Overdue (${overdue.length})</h3>${overdue.map(t=>`<div class="digest-item"><span>${t.name}</span><span style="color:var(--danger)">${Math.abs(getDaysUntilDue(t))}d ago</span></div>`).join('')}</div>`;
+  if (dueSoon.length) html+=`<div class="digest-card"><h3>Due within 2 weeks (${dueSoon.length})</h3>${dueSoon.map(t=>`<div class="digest-item"><span>${t.name}</span><span style="color:var(--warn)">${getDaysUntilDue(t)===0?'Today':'In '+getDaysUntilDue(t)+'d'}</span></div>`).join('')}</div>`;
+  if (upcoming.length) html+=`<div class="digest-card"><h3>Upcoming</h3>${upcoming.map(t=>`<div class="digest-item"><span>${t.name}</span><span style="color:var(--text3)">In ${getDaysUntilDue(t)}d</span></div>`).join('')}</div>`;
+  if (!html) html='<div class="empty-state">All tasks on track</div>';
+  section.innerHTML=html;
 }
 
 function renderBin() {
-  const archived = allTasks.filter(t => t.status === 'archived');
-  const bin = allTasks.filter(t => t.status === 'deleted');
-  const archList = document.getElementById('archived-list');
-  const binList = document.getElementById('bin-list');
-
-  archList.innerHTML = archived.length === 0
+  const archived = allTasks.filter(t=>t.status==='archived');
+  const bin = allTasks.filter(t=>t.status==='deleted');
+  document.getElementById('archived-list').innerHTML = !archived.length
     ? '<div class="empty-bin">No archived tasks</div>'
-    : archived.map(t => `<div class="archived-card"><div class="archived-card-info"><div class="archived-card-name">${t.name}</div><div class="archived-card-meta">Every ${t.freqDays}d · Archived ${formatDate(t.archivedAt)}</div></div><button class="mini-btn unarchive" onclick="window._unarchive('${t.id}')">Restore</button></div>`).join('');
-
-  binList.innerHTML = bin.length === 0
+    : archived.map(t=>`<div class="archived-card"><div class="archived-card-info"><div class="archived-card-name">${t.name}</div><div class="archived-card-meta">Every ${t.freqDays}d · Archived ${formatDate(t.archivedAt)}</div></div><button class="mini-btn unarchive" onclick="window._unarchive('${t.id}')">Restore</button></div>`).join('');
+  document.getElementById('bin-list').innerHTML = !bin.length
     ? '<div class="empty-bin">Bin is empty</div>'
-    : bin.map(t => `<div class="bin-card"><div class="bin-card-info"><div class="bin-card-name">${t.name}</div><div class="bin-card-meta">Deleted ${formatDate(t.deletedAt)}</div></div><div class="bin-actions"><button class="mini-btn restore" onclick="window._restoreFromBin('${t.id}')">Restore</button><button class="mini-btn perm-delete" onclick="window._permDelete('${t.id}')">Delete</button></div></div>`).join('')
+    : bin.map(t=>`<div class="bin-card"><div class="bin-card-info"><div class="bin-card-name">${t.name}</div><div class="bin-card-meta">Deleted ${formatDate(t.deletedAt)}</div></div><div class="bin-actions"><button class="mini-btn restore" onclick="window._restoreFromBin('${t.id}')">Restore</button><button class="mini-btn perm-delete" onclick="window._permDelete('${t.id}')">Delete</button></div></div>`).join('')
       + `<button class="danger-action" onclick="window._emptyBin()">Empty bin</button>`;
 }
 
 function renderSettings() {
-  const tasks = allTasks.filter(t => t.status === 'active');
+  const tasks = allTasks.filter(t=>t.status==='active');
   document.getElementById('settings-list').innerHTML =
     '<div class="section-title">Tap edit to adjust a task</div><div class="settings-group">' +
-    tasks.map(t => `<div class="setting-item"><div><div class="setting-label">${t.name}</div><div class="setting-sub">Every ${t.freqDays} days</div></div><button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="window._openEdit('${t.id}')">Edit</button></div>`).join('') +
+    tasks.map(t=>`<div class="setting-item"><div><div class="setting-label">${t.name}</div><div class="setting-sub">Every ${t.freqDays} days</div></div><button class="btn btn-edit" style="flex:0;padding:6px 12px;font-size:10px;" onclick="window._openEdit('${t.id}')">Edit</button></div>`).join('') +
     '</div>';
 }
 
-function renderAll() {
-  renderTasks();
-  renderHistory();
-  renderDigest();
-  renderBin();
-  renderSettings();
+function renderAll() { renderTasks(); renderHistory(); renderDigest(); renderBin(); renderSettings(); }
+
+function showApp(user) {
+  currentUser = user;
+  const email = user.email || '';
+  document.getElementById('subtitle-email').textContent = email;
+  hide('screen-loading'); hide('screen-signin'); hide('screen-denied');
+  document.getElementById('view-tasks').classList.add('active');
+  document.getElementById('main-nav').style.display = 'flex';
 }
 
-// Expose to global scope for inline onclick handlers
+function showDenied(user) {
+  hide('screen-loading'); hide('screen-signin');
+  document.getElementById('denied-email').textContent = 'Signed in as: ' + (user.email || user.uid);
+  show('screen-denied');
+}
+
+async function startListening() {
+  if (unsubscribe) unsubscribe();
+  const snap = await getDocs(collection(db, 'tasks'));
+  if (snap.empty) { for (const t of DEFAULT_TASKS) await setDoc(doc(db, 'tasks', t.id), t); }
+  unsubscribe = onSnapshot(collection(db, 'tasks'), (snapshot) => {
+    allTasks = snapshot.docs.map(d => d.data());
+    setSyncDot('synced');
+    renderAll();
+  }, () => setSyncDot('error'));
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    hide('screen-loading');
+    if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+    show('screen-signin');
+    document.getElementById('view-tasks').classList.remove('active');
+    document.getElementById('main-nav').style.display = 'none';
+    return;
+  }
+
+  // If ALLOWED_UIDS is empty, allow anyone (setup mode)
+  // Once you add UIDs, only those users get in
+  if (ALLOWED_UIDS.length > 0 && !ALLOWED_UIDS.includes(user.uid)) {
+    showDenied(user);
+    return;
+  }
+
+  showApp(user);
+  await startListening();
+});
+
+// Global handlers
+window._signIn = async () => {
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { console.error(e); }
+};
+
+window._signOut = async () => {
+  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  allTasks = [];
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  await signOut(auth);
+};
+
 window._toggleExpand = (id) => { expandedId = expandedId === id ? null : id; renderTasks(); };
 
 window._markDone = async (id) => {
@@ -506,51 +581,39 @@ window._openEdit = (id) => {
 
 window._openContext = (id) => {
   contextId = id;
-  const task = allTasks.find(t => t.id === id);
-  document.getElementById('context-task-name').textContent = task.name;
+  document.getElementById('context-task-name').textContent = allTasks.find(t=>t.id===id).name;
   document.getElementById('context-menu').classList.add('open');
 };
 
 window._unarchive = async (id) => {
-  const task = allTasks.find(t => t.id === id);
-  task.status = 'active';
-  delete task.archivedAt;
-  await saveTask(task);
+  const task = allTasks.find(t=>t.id===id);
+  task.status='active'; delete task.archivedAt; await saveTask(task);
 };
 
 window._restoreFromBin = async (id) => {
-  const task = allTasks.find(t => t.id === id);
-  task.status = 'active';
-  delete task.deletedAt;
-  await saveTask(task);
+  const task = allTasks.find(t=>t.id===id);
+  task.status='active'; delete task.deletedAt; await saveTask(task);
 };
 
 window._permDelete = async (id) => {
-  if (!confirm('Permanently delete this task? This cannot be undone.')) return;
-  allTasks = allTasks.filter(t => t.id !== id);
+  if (!confirm('Permanently delete this task?')) return;
+  allTasks = allTasks.filter(t=>t.id!==id);
   await removeTask(id);
 };
 
 window._emptyBin = async () => {
   if (!confirm('Permanently delete all items in the bin?')) return;
-  const bin = allTasks.filter(t => t.status === 'deleted');
-  for (const t of bin) await removeTask(t.id);
+  for (const t of allTasks.filter(t=>t.status==='deleted')) await removeTask(t.id);
 };
 
 window.openAdd = () => {
   editingId = null;
   document.getElementById('modal-title').textContent = 'Add Task';
-  document.getElementById('edit-name').value = '';
-  document.getElementById('edit-freq').value = '';
-  document.getElementById('edit-last').value = '';
-  document.getElementById('edit-notes').value = '';
+  ['edit-name','edit-freq','edit-last','edit-notes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('edit-modal').classList.add('open');
 };
 
-window.closeModal = () => {
-  document.getElementById('edit-modal').classList.remove('open');
-  editingId = null;
-};
+window.closeModal = () => { document.getElementById('edit-modal').classList.remove('open'); editingId = null; };
 
 window.saveEdit = async () => {
   const name = document.getElementById('edit-name').value.trim();
@@ -559,92 +622,53 @@ window.saveEdit = async () => {
   const notes = document.getElementById('edit-notes').value.trim();
   if (!name || !freq || freq < 1) return;
   if (editingId) {
-    const task = allTasks.find(t => t.id === editingId);
-    task.name = name; task.freqDays = freq; task.lastDone = last; task.notes = notes;
+    const task = allTasks.find(t=>t.id===editingId);
+    task.name=name; task.freqDays=freq; task.lastDone=last; task.notes=notes;
     await saveTask(task);
   } else {
-    const task = { id: nextId(), name, freqDays: freq, lastDone: last, notes, history: [], status: 'active' };
-    await saveTask(task);
+    await saveTask({ id: nextId(), name, freqDays: freq, lastDone: last, notes, history: [], status: 'active' });
   }
   window.closeModal();
 };
 
 window.doArchive = async () => {
-  const task = allTasks.find(t => t.id === contextId);
-  task.status = 'archived';
-  task.archivedAt = new Date().toISOString().split('T')[0];
-  if (expandedId === contextId) expandedId = null;
-  closeContext();
-  await saveTask(task);
+  const task = allTasks.find(t=>t.id===contextId);
+  task.status='archived'; task.archivedAt=new Date().toISOString().split('T')[0];
+  if (expandedId===contextId) expandedId=null;
+  closeContext(); await saveTask(task);
 };
 
 window.doDelete = async () => {
-  const task = allTasks.find(t => t.id === contextId);
-  task.status = 'deleted';
-  task.deletedAt = new Date().toISOString().split('T')[0];
-  if (expandedId === contextId) expandedId = null;
-  closeContext();
-  await saveTask(task);
+  const task = allTasks.find(t=>t.id===contextId);
+  task.status='deleted'; task.deletedAt=new Date().toISOString().split('T')[0];
+  if (expandedId===contextId) expandedId=null;
+  closeContext(); await saveTask(task);
 };
 
-function closeContext() {
-  document.getElementById('context-menu').classList.remove('open');
-  contextId = null;
-}
-document.getElementById('context-menu').addEventListener('click', e => { if (e.target === e.currentTarget) closeContext(); });
+function closeContext() { document.getElementById('context-menu').classList.remove('open'); contextId=null; }
+document.getElementById('context-menu').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeContext(); });
 
 window.showView = (name, btn) => {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
   btn.classList.add('active');
 };
 
 window.toggleTheme = () => {
-  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  const next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('ht_theme', next);
-  document.getElementById('theme-icon-dark').style.display = next === 'dark' ? 'block' : 'none';
-  document.getElementById('theme-icon-light').style.display = next === 'light' ? 'block' : 'none';
+  document.getElementById('theme-icon-dark').style.display = next==='dark' ? 'block' : 'none';
+  document.getElementById('theme-icon-light').style.display = next==='light' ? 'block' : 'none';
 };
 
-// Apply saved theme
 const savedTheme = localStorage.getItem('ht_theme') || 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
-document.getElementById('theme-icon-dark').style.display = savedTheme === 'dark' ? 'block' : 'none';
-document.getElementById('theme-icon-light').style.display = savedTheme === 'light' ? 'block' : 'none';
+document.getElementById('theme-icon-dark').style.display = savedTheme==='dark' ? 'block' : 'none';
+document.getElementById('theme-icon-light').style.display = savedTheme==='light' ? 'block' : 'none';
 
-// Real-time Firestore listener
-async function init() {
-  try {
-    // Seed defaults if collection is empty
-    const snap = await getDocs(collection(db, 'tasks'));
-    if (snap.empty) {
-      for (const t of DEFAULT_TASKS) await setDoc(doc(db, 'tasks', t.id), t);
-    }
-
-    // Live listener
-    onSnapshot(collection(db, 'tasks'), (snapshot) => {
-      allTasks = snapshot.docs.map(d => d.data());
-      setSyncDot('synced');
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('view-tasks').classList.add('active');
-      renderAll();
-    }, (err) => {
-      setSyncDot('error');
-      console.error(err);
-    });
-
-  } catch(e) {
-    setSyncDot('error');
-    document.getElementById('loading').innerHTML = '<div style="text-align:center;padding:24px;color:var(--danger);font-size:13px;">Could not connect to Firebase.<br><br>Check your internet connection.</div>';
-    console.error(e);
-  }
-}
-
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-
-init();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
